@@ -28,12 +28,12 @@ class UserSeeder extends Seeder
             'role' => UserRole::MODERATOR,
         ]);
 
-        User::create([
-            'name' => 'Гость Павел',
-            'email' => 'guest@mylara.com',
-            'password' => Hash::make('password123'),
-            'role' => UserRole::GUEST,
-        ]);
+//        User::create([
+//            'name' => 'Гость Павел',
+//            'email' => 'guest@mylara.com',
+//            'password' => Hash::make('password123'),
+//            'role' => UserRole::GUEST,
+//        ]);
 
         User::create([
             'name' => 'Продавец Ашот',

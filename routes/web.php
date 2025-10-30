@@ -1,5 +1,11 @@
 <?php
 
+use App\Enums\UserRole;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\MainController;
 use Illuminate\Support\Facades\Route;
 
@@ -7,8 +13,31 @@ use Illuminate\Support\Facades\Route;
 //    return view('welcome');
 //});
 
-Route::middleware(['admin'])->group(function () {
-    Route::get('/admin/', [MainController::class, 'index'])->name('admin.index');
+Route::middleware([UserRole::ADMIN->value, UserRole::MODERATOR->value])->group(function () {
+    Route::get('/adminarea/', [AdminController::class, 'index'])->name('admin.index');
 });
 
-Route::get('/', [MainController::class, 'index'])->name('index');
+//Route::middleware(UserRole::GUEST->value)->group(function () {
+
+// Форма входа
+Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('login', [LoginController::class, 'login']);
+// Форма регистрации
+Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+Route::post('register', [RegisterController::class, 'register']);
+
+
+Route::get('forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+Route::post('forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::get('reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
+
+
+//});
+
+
+Route::middleware('auth')->group(function () {
+    Route::post('logout', [LoginController::class, 'logout'])->name('logout');
+});
+
+Route::get('/', [MainController::class, 'index'])->name('home');
