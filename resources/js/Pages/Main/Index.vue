@@ -6,9 +6,8 @@ defineProps({
 </script>
 
 <template>
-    <h1>Главная</h1>
-
-    {{ user.name }}
+    <div v-if="user?.name">{{ user.name }}</div>
+    <!--    {{ user.name }}-->
 </template>
 
 <style scoped>

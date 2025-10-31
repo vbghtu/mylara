@@ -1,13 +1,18 @@
 <script setup>
-import {Link} from '@inertiajs/vue3';
+import {Link, usePage} from '@inertiajs/vue3';
+import {computed} from "vue";
+import {route} from "ziggy-js";
 
 const navigation = [
     {name: 'Главная', href: '/'},
     {name: 'Профиль', href: '/users'},
     {name: 'Админка', href: '/adminarea'},
-    // {name: 'Выход', href: '/logout'},
+    // {name: 'Вход', href: '/login'},
+    {name: 'Регистрация', href: '/register'},
 ];
-
+const page = usePage();
+// const layoutData = page.props.layoutData || {};
+const layoutData = computed(() => page.props.layoutData || {});
 </script>
 
 <template>
@@ -16,7 +21,7 @@ const navigation = [
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between h-16">
                     <div class="flex items-center">
-                        <h1 class="text-xl font-semibold"></h1>
+                        <h1 class="text-xl font-semibold">{{ layoutData.h1 }}</h1>
                     </div>
                     <div class="flex items-center space-x-4">
                         <Link
@@ -28,7 +33,9 @@ const navigation = [
                         >
                             {{ link.name }}
                         </Link>
+
                         <Link
+                            v-if="$page.props.auth.user"
                             :href="route('logout')"
                             as="button"
                             class="cursor-pointer text-gray-700 font-medium hover:text-indigo-600 transition duration-300 transform hover:scale-105"
@@ -40,6 +47,13 @@ const navigation = [
                                     ? $page.props.auth.user.name
                                     : ""
                             }})
+                        </Link>
+                        <Link
+                            v-else
+                            :href="route('login')"
+                            class="cursor-pointer text-gray-700 font-medium hover:text-indigo-600 transition duration-300 transform hover:scale-105"
+                        >
+                            Вход
                         </Link>
 
                     </div>
