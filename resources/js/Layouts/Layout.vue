@@ -5,7 +5,7 @@ import {route} from "ziggy-js";
 
 const navigation = [
     {name: 'Главная', href: '/'},
-    {name: 'Профиль', href: '/users'},
+    {name: 'Профиль', href: '/profile'},
     {name: 'Админка', href: '/adminarea'},
     // {name: 'Вход', href: '/login'},
     {name: 'Регистрация', href: '/register'},

@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\MainController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 //Route::get('/', function () {
@@ -38,6 +39,19 @@ Route::middleware(['web'])->group(function () {
 // только авторизированным не зависимо от роли
 Route::middleware('auth')->group(function () {
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
+    Route::get('profile', [ProfileController::class, 'show']);
 });
 
+
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/adminarea', function () {
+        return 'Панель администратора';
+    });
+});
+
+//Route::middleware(['auth', 'role:admin,moderator'])->group(function () {
+//    Route::get('/moderate', function () {
+//        return 'Модерация';
+//    });
+//});
 
