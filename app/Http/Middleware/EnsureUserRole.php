@@ -19,7 +19,7 @@ class EnsureUserRole
         if (!$request->user()) {
             return redirect()->route('login'); // или abort(403)
         }
-//        dd($request->user()->role->value);
+
         // Если переданы допустимые роли — проверяем
         if (!empty($roles) && !in_array($request->user()->role->value, $roles)) {
             abort(403, 'Доступ запрещён');
