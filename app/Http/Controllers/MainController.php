@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class MainController extends Controller
 {
     public function index()
     {
-//        $user = $user->get();
-        $user = auth()->user();
-//        dump($user);
+        $user = Auth::user();
         return Inertia::render('Main/Index', [
             'user' => $user,
             'layoutData' => [
