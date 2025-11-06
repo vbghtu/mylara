@@ -39,7 +39,8 @@ Route::middleware(['web'])->group(function () {
 // только авторизированным не зависимо от роли
 Route::middleware('auth')->group(function () {
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
-    Route::get('profile', [ProfileController::class, 'show']);
+    Route::get('profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::post('profile', [ProfileController::class, 'store'])->name('profile.store');
 });
 
 
