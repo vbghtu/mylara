@@ -44,10 +44,8 @@ Route::middleware('auth')->group(function () {
 });
 
 
-Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('/adminarea', function () {
-        return 'Панель администратора';
-    });
+Route::middleware(['auth', 'role:admin,moderator,seller'])->group(function () {
+    Route::resource('products', ProductController::class);
 });
 
 //Route::middleware(['auth', 'role:admin,moderator'])->group(function () {

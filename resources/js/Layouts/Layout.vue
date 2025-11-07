@@ -1,16 +1,19 @@
 <script setup>
 import {Link, usePage} from '@inertiajs/vue3';
-import {computed} from "vue";
+import {computed, ref} from "vue";
 import {route} from "ziggy-js";
 
 const navigation = [
     {name: 'Главная', href: '/'},
     {name: 'Профиль', href: '/profile'},
-    {name: 'Админка', href: '/adminarea'},
+    // {name: 'Админка', href: '/adminarea'},
     // {name: 'Вход', href: '/login'},
     {name: 'Регистрация', href: '/register'},
 ];
 const page = usePage();
+const {auth} = usePage().props
+const user = auth.user
+const open = ref(false)
 // const layoutData = page.props.layoutData || {};
 const layoutData = computed(() => page.props.layoutData || {});
 </script>
@@ -33,20 +36,47 @@ const layoutData = computed(() => page.props.layoutData || {});
                         >
                             {{ link.name }}
                         </Link>
+                        <div class="relative">
+                            <!-- Кнопка-триггер -->
+                            <button
+                                class="flex items-center text-sm font-medium text-gray-700 hover:text-gray-900 focus:outline-none"
+                                @click="open = !open"
+                            >
+                                <span>Меню</span>
+                                <svg class="ml-1 h-4 w-4" fill="currentColor" viewBox="0 0 20 20"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path clip-rule="evenodd"
+                                          d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                          fill-rule="evenodd"/>
+                                </svg>
+                            </button>
 
+                            <!-- Выпадающее меню -->
+                            <div
+                                v-show="open"
+                                class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50"
+                            >
+                                <!-- Приватные пункты (только для авторизованных) -->
+                                <!--                                <template >-->
+                                <Link
+                                    v-if="user"
+                                    :href="route('profile.show')"
+                                    class="cursor-pointer text-gray-700
+                                    font-medium px-4 py-2"
+                                >
+                                    Создать товар
+                                </Link>
+                            </div>
+                        </div>
                         <Link
-                            v-if="$page.props.auth.user"
+                            v-if="user"
                             :href="route('logout')"
                             as="button"
                             class="cursor-pointer text-gray-700 font-medium hover:text-indigo-600 transition duration-300 transform hover:scale-105"
                             method="post"
                             type="button"
                         >
-                            Выход ({{
-                                $page.props.auth.user
-                                    ? $page.props.auth.user.name
-                                    : ""
-                            }})
+                            Выход ({{ user ? user.name : "" }})
                         </Link>
                         <Link
                             v-else
