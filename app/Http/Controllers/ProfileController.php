@@ -26,16 +26,31 @@ class ProfileController extends Controller
 
     public function store(UserRequest $request): RedirectResponse
     {
+//        dd($request);
         $user = Auth::user();
-        dd($request);
-        if ($user->profile_photo) {
-            Storage::disk('public')->delete($user->profile_photo);
+        $data = [];
+
+        if ($request->filled('email')) {
+            $data['email'] = $request->email;
         }
 
-        $user->profile_photo = $request->file('photo')->store('profile-photos', 'public');
-        $user->save();
+        if ($request->filled('name')) {
+            $data['name'] = $request->name;
+        }
 
-        return redirect()->route('profile.show', ['user' => $user])->with('success', 'Фото профиля обновлено!');
+        if ($request->hasFile('photo')) {
+            if ($user->profile_photo) {
+                Storage::disk('public')->delete($user->profile_photo);
+            }
+
+            $data['profile_photo'] = $request->file('photo')->store('profile-photos', 'public');
+        }
+
+        if (!empty($data)) {
+            $user->update($data);
+        }
+//        return redirect()->route('profile.show', ['user' => $user])->with('success', 'Фото профиля обновлено!');
+        return back()->with('success', 'Профиль обновлён!');
 
     }
 }

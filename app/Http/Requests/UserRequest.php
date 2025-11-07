@@ -24,8 +24,9 @@ class UserRequest extends FormRequest
     {
         return [
             'photo' => ['image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['sometimes', 'required', 'string', 'max:255'],
             'email' => [
+                'sometimes',
                 'required',
                 'string',
                 'email',
