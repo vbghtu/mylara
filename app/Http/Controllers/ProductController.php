@@ -3,15 +3,24 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
+use Inertia\Response as InertiaResponse;
 
 class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request): InertiaResponse
     {
-        //
+        $user = Auth::user();
+        return Inertia::render('Profile/Products/Index', [
+            'user' => $user,
+            'layoutData' => [
+                'h1' => 'Мои продукты',
+            ],
+        ]);
     }
 
     /**
@@ -59,6 +68,6 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
-        // 
+        //
     }
 }

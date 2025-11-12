@@ -26,7 +26,6 @@ class ProfileController extends Controller
 
     public function store(UserRequest $request): RedirectResponse
     {
-//        dd($request);
         $user = Auth::user();
         $data = [];
 
