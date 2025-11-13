@@ -9,7 +9,7 @@ const props = defineProps({
 </script>
 
 <template>
-    <div class="flex  justify-center h-screen py-4">
+    <div class="flex  justify-center py-4">
         <nav class="container px-4  flex justify-end-safe">
 
             <Link

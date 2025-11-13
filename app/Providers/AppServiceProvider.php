@@ -22,7 +22,7 @@ class AppServiceProvider extends ServiceProvider
     {
         //  @todo это тест сюда надо будет прокинуть меню инабор его поле чуть позже
         Inertia::share([
-            'layoutData' => function () {
+            'GlobalData' => function () {
                 return [
                     'currentDate' => now()->format('d.m.Y'),
                     'appName' => config('app.name'),

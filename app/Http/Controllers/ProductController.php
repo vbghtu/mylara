@@ -28,7 +28,11 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Profile/Products/Create', [
+            'layoutData' => [
+                'h1' => 'Новый продукт',
+            ],
+        ]);
     }
 
     /**
