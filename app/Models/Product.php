@@ -10,7 +10,7 @@ class Product extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
+//        'user_id',
         'category_id',
         'title',
         'slug',
@@ -26,7 +26,7 @@ class Product extends Model
     {
         return $this->hasMany(Product::class, 'category_id');
     }
-    
+
     public function images()
     {
         return $this->hasMany(ProductImage::class);

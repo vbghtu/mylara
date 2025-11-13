@@ -7,11 +7,11 @@ import ProductImageUpload from "../../../Components/ProductImageUpload.vue";
 import PrimaryButton from "../../../Components/PrimaryButton.vue";
 
 const form = useForm({
+    category_id: 1, // пока что как дефолтное значение @todo добавить в миграцию дефолтное, добавить в сидер какинить категории, протащить их сюда
     title: '',
     slug: '',
     description: '',
     price: 0,
-    category_id: '', // или null
     is_available: true,
     material: '',
     is_customizable: true,
