@@ -21,9 +21,9 @@ defineProps({
 </script>
 
 <template>
-    <div class="mb-6">
-        <label :for="id" class="block mb-2 text-sm font-medium text-gray-900 ">{{ name }}</label>
-        <input :id="id" v-model="field" :class="['border' ,{'!ring-red-500': error}]" :type="type">
+    <div class="mb-6 w-full">
+        <label :for="id" class="block mb-2 text-sm font-medium text-gray-900  ">{{ name }}</label>
+        <input :id="id" v-model="field" :class="['border','w-full' ,{'!ring-red-500': error}]" :type="type">
         <transition
             enter-active-class="transition ease-out duration-300"
             enter-from-class="opacity-0"
