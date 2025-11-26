@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProductRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response as InertiaResponse;
 
@@ -16,11 +17,28 @@ class ProductController extends Controller
     public function index(Request $request): InertiaResponse
     {
         $user = Auth::user();
+// @todo добавить категории
+        $products = $user->products()
+            ->with('images')
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->map(function ($product) {
+                if ($product->image_path) {
+                    $product->main_image_url = Storage::url($product->image_path);
+                }
+
+                // Галерея
+                $product->gallery_urls = $product->images->map(fn($image) => Storage::url($image->path));
+
+                return $product;
+            });
+
         return Inertia::render('Profile/Products/Index', [
             'user' => $user,
             'layoutData' => [
                 'h1' => 'Мои продукты',
             ],
+            'products' => $products,
         ]);
     }
 
@@ -30,7 +48,7 @@ class ProductController extends Controller
     public function store(ProductRequest $request)
     {
         // Начинаем транзакцию (на случай ошибки при загрузке изображений)
-        $product = \DB::transaction(function () use ($request) {
+        \DB::transaction(function () use ($request) {
             // Сохраняем главное изображение, если есть
             $mainImagePath = null;
             if ($request->hasFile('main_image')) {
