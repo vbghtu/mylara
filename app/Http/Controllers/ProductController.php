@@ -14,22 +14,22 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): InertiaResponse
+    public function index(Request $request, $page = null): InertiaResponse
     {
         $user = Auth::user();
+        $perPage = config('app.pagination.products_per_page');
+//        $currentPage = $page ?? 1;
+
 // @todo добавить категории
         $products = $user->products()
             ->with('images')
             ->orderBy('created_at', 'desc')
-            ->get()
-            ->map(function ($product) {
+            ->paginate($perPage) // сколько элементов на странице (например, 15)
+            ->through(function ($product) {
                 if ($product->image_path) {
                     $product->main_image_url = Storage::url($product->image_path);
                 }
-
-                // Галерея
                 $product->gallery_urls = $product->images->map(fn($image) => Storage::url($image->path));
-
                 return $product;
             });
 

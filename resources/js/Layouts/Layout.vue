@@ -58,14 +58,28 @@ const layoutData = computed(() => page.props.layoutData || {});
                             >
                                 <!-- Приватные пункты (только для авторизованных) -->
                                 <!--                                <template >-->
-                                <Link
-                                    v-if="user"
-                                    :href="route('profile.show')"
-                                    class="cursor-pointer text-gray-700
+                                <ul>
+                                    <li>
+                                        <Link
+                                            v-if="user"
+                                            :href="route('products.create')"
+                                            class="cursor-pointer text-gray-700
                                     font-medium px-4 py-2"
-                                >
-                                    Создать товар
-                                </Link>
+                                        >
+                                            Создать товар
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link
+                                            v-if="user"
+                                            :href="route('products.index')"
+                                            class="cursor-pointer text-gray-700
+                                    font-medium px-4 py-2"
+                                        >
+                                            мои товары
+                                        </Link>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                         <Link

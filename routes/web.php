@@ -47,6 +47,9 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth', 'role:admin,moderator,seller'])->group(function () {
     Route::resource('products', ProductController::class);
+    Route::get('/products/page/{page}', [ProductController::class, 'index'])
+        ->name('products.index.paginated')
+        ->where('page', '[1-9][0-9]*'); // только целые ≥1
 });
 
 //Route::middleware(['auth', 'role:admin,moderator'])->group(function () {
