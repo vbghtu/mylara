@@ -48,6 +48,19 @@ services:
     depends_on:
       - mylara_mariadb
 
+  composer:
+    build:
+      context: .
+      dockerfile: _docker/php/Dockerfile
+      target: prebuild  # ← используем стадию, где уже установлен composer
+    volumes:
+      - ./:/var/www/html
+    working_dir: /var/www/html
+    entrypoint: [ "/usr/local/bin/composer" ]
+    networks:
+      - mylara_net
+
+
 networks:
   mylara_net:
     driver: bridge
