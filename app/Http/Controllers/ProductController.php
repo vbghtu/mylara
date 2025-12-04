@@ -16,10 +16,9 @@ class ProductController extends Controller
      */
     public function index(Request $request, $page = null): InertiaResponse
     {
-//        dd($page);
         $user = Auth::user();
         $perPage = config('app.pagination.products_per_page');
-//        $currentPage = $page ?? 1;
+
 
 // @todo добавить категории
         $products = $user->products()

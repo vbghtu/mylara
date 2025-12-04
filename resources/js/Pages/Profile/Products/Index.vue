@@ -1,6 +1,6 @@
 <script setup>
-import {Link} from '@inertiajs/vue3';
 import ProductsLayout from "../../../Layouts/ProductsLayout.vue";
+import Paginator from "../../../Components/Paginator.vue";
 
 const props = defineProps({
     products: {
@@ -35,23 +35,14 @@ const goToPage = (page) => {
 
                 </div>
             </div>
+
+
             <!-- Пагинация -->
-            <div v-if="props.products.data.links" class="pagination w-full flex gap-3">
-                <!--                <template v-for="(link, key) in props.products.links" :key="key">-->
-                <Link
-                    v-for="page in props.products.meta.last_page"
-                    :key="page"
-                    :class="{
-                            'active': page === products.meta.current_page,
-                            'pagination-link': true
-                        }"
-                    :href="goToPage(page)"
-                    preserve-scroll
-                    v-html="page"
-                />
-                <!--                <span v-else :class="{ 'disabled': true, 'pagination-link': true }" v-html="link.label"/>-->
-                <!--                </template>-->
-            </div>
+            <Paginator
+                :navLink="false"
+                :pageMeta=props.products.meta
+            />
+
         </div>
     </ProductsLayout>
 </template>
