@@ -16,6 +16,7 @@ class ProductController extends Controller
      */
     public function index(Request $request, $page = null): InertiaResponse
     {
+//        dd($page);
         $user = Auth::user();
         $perPage = config('app.pagination.products_per_page');
 //        $currentPage = $page ?? 1;
@@ -24,7 +25,7 @@ class ProductController extends Controller
         $products = $user->products()
             ->with('images')
             ->orderBy('created_at', 'desc')
-            ->paginate($perPage) // сколько элементов на странице (например, 15)
+            ->paginate($perPage, ['*'], 'page', $page) // сколько элементов на странице (например, 15)
             ->through(function ($product) {
                 if ($product->image_path) {
                     $product->main_image_url = Storage::url($product->image_path);
@@ -33,12 +34,25 @@ class ProductController extends Controller
                 return $product;
             });
 
+        $basePath = preg_replace('#/page/\d+$#', '', $request->url());
+
         return Inertia::render('Profile/Products/Index', [
             'user' => $user,
             'layoutData' => [
                 'h1' => 'Мои продукты',
             ],
-            'products' => $products,
+            'products' => [
+                'data' => $products,
+                'meta' => [
+                    'current_page' => $products->currentPage(),
+                    'last_page' => $products->lastPage(),
+                    'per_page' => $products->perPage(),
+                    'total' => $products->total(),
+                    'from' => $products->firstItem(),
+                    'to' => $products->lastItem(),
+                    'path' => $basePath, // ← критически важно!
+                ],
+            ],
         ]);
     }
 
