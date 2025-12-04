@@ -35,6 +35,7 @@ class ProductController extends Controller
 
         $basePath = preg_replace('#/page/\d+$#', '', $request->url());
 
+
         return Inertia::render('Profile/Products/Index', [
             'user' => $user,
             'layoutData' => [

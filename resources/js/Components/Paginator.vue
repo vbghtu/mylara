@@ -28,7 +28,9 @@ const goToPage = (page) => {
 </script>
 
 <template>
-    <nav class="flex justify-around pt-4">
+    {{ pageMeta.total }}
+    <nav v-if="pageMeta.last_page > 1"
+         class="flex justify-around pt-4">
         <ul class="flex gap-2 flex-row">
             <li v-if="(navLink===true && pageMeta.current_page!== 1) ">
                 <Link
