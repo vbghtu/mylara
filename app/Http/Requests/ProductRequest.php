@@ -24,8 +24,6 @@ class ProductRequest extends FormRequest
     {
         $productId = $this->route('product');
 
-//        'category_id',
-
         return [
 //            'user_id' => ['required', 'max:100', 'exists:users,id',],
             'category_id' => ['required', 'exists:categories,id'],
@@ -33,11 +31,13 @@ class ProductRequest extends FormRequest
             'image_path' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
             'gallery' => ['nullable', 'array', 'max:5'],
             'gallery.*' => ['image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
+            'removed_gallery_ids' => ['nullable', 'array'],
+            'removed_gallery_ids.*' => ['exists:product_images,id'],
             'slug' => [
                 'required',
                 'string',
                 'max:50',
-                'alpha_dash', // только буквы, цифры, дефисы и подчёркивания
+                'regex:/^[a-zA-Z0-9_-]+$/', // только буквы, цифры, дефисы и подчёркивания
                 Rule::unique('products', 'slug')->ignore($productId),
             ],
             'is_customizable' => ['required', 'boolean'],

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductRequest;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -57,6 +58,77 @@ class ProductController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        $user = Auth::user();
+        $product = $user->products()->where('id', $id)->with('images')->firstOrFail();
+
+
+//        if ($product->image_path) {
+//            $product->main_image = [
+//                'id' => 'main_image',
+//                'full_url' => Storage::url($product->image_path),
+//                'alt' => '',
+//            ];
+//        } else {
+//            $product->main_image = null;
+//        }
+        $product->main_image = Storage::url($product->image_path);
+//        dd($product);
+        $product->gallery = $product->images->map(fn($image) => [
+            'id' => $image->id,
+            'full_url' => Storage::url($image->path),
+            'alt' => $image->alt ?? '',
+        ]);
+
+        return Inertia::render('Profile/Products/Edit', [
+            'layoutData' => [
+                'h1' => 'Редактировать товар "' . $product->title . '"',
+            ],
+            'product' => $product,
+
+        ]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(ProductRequest $request, Product $product)
+    {
+
+        $data = $request->validated();
+        if ($request->hasFile('main_image')) {
+            $data['image_path'] = $request->file('main_image')->store('products', 'public');
+        }
+//        $mainImagePath = null;
+//        if ($request->hasFile('main_image')) {
+//            $mainImagePath = $request->file('main_image')->store('products', 'public');
+//        }
+//        if ($request->hasFile('gallery')) {
+//            $galleryPaths = [];
+//            foreach ($request->file('gallery') as $image) {
+//                $galleryPaths[] = $image->store('products/gallery', 'public');
+//            }
+//            $data['gallery'] = json_encode($galleryPaths); // или сохраняй в отдельную таблицу
+//        }
+        dd($data);
+        $product->update($data);
+
+        return back()->with('success', 'Товар обновлён!');
+//        dd($request);
+    }
+
+    /**
      * Store a newly created resource in storage.
      */
     public function store(ProductRequest $request)
@@ -108,45 +180,6 @@ class ProductController extends Controller
                 'h1' => 'Новый продукт',
             ],
         ]);
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        $user = Auth::user();
-        $product = $user->products()->where('id', $id)->with('images')->firstOrFail();
-
-
-        if ($product->image_path) {
-            $product->main_image_url = Storage::url($product->image_path);
-        }
-        $product->gallery_urls = $product->images->map(fn($image) => Storage::url($image->path));
-
-        return Inertia::render('Profile/Products/Edit', [
-            'layoutData' => [
-                'h1' => 'Редактировать товар "' . $product->title . '"',
-            ],
-            'product' => $product,
-
-        ]);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
     }
 
     /**
