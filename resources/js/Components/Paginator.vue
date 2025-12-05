@@ -1,6 +1,5 @@
 <script setup>
 
-
 const {pageMeta} = defineProps({
     pageMeta: {
         type: Object,
@@ -13,7 +12,7 @@ const {pageMeta} = defineProps({
     // 'current_page' => $products->currentPage(),
     // 'last_page' => $products->lastPage(),
     // 'per_page' => $products->perPage(),
-    // 'total' => $products->total(),
+    // 'total' => $products->total(), // количество записей в бд а не в пагинации
     // 'from' => $products->firstItem(),
     // 'to' => $products->lastItem(),
     // 'path' => $basePath, // ← критически важно!
@@ -21,14 +20,11 @@ const {pageMeta} = defineProps({
 
 const goToPage = (page) => {
     return page === 1 ? pageMeta.path : `${pageMeta.path}/page/${page}`
-
-
 }
 
 </script>
 
 <template>
-    {{ pageMeta.total }}
     <nav v-if="pageMeta.last_page > 1"
          class="flex justify-around pt-4">
         <ul class="flex gap-2 flex-row">

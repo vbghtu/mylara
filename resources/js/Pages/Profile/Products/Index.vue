@@ -1,6 +1,8 @@
 <script setup>
 import ProductsLayout from "../../../Layouts/ProductsLayout.vue";
 import Paginator from "../../../Components/Paginator.vue";
+import {Link} from "@inertiajs/vue3";
+import {route} from "ziggy-js";
 
 const props = defineProps({
     products: {
@@ -8,15 +10,6 @@ const props = defineProps({
         default: () => []
     },
 });
-
-const goToPage = (page) => {
-    const path = props.products.meta.path // например: "/profile/products"
-    const url = page === 1
-        ? path
-        : `${path}/page/${page}`
-    return url;
-
-}
 
 
 </script>
@@ -26,14 +19,15 @@ const goToPage = (page) => {
         <h1>Список продуктов</h1>
         <div class="w-full ">
             <div class="w-full flex gap-4">
-                <div v-for="item in props.products.data.data"
-                     :key="item.id"
-                     class="item"
+                <Link v-for="item in props.products.data.data"
+                      :key="item.id"
+                      :href="route('products.edit', item.id)"
+                      class="item"
                 >
                     <img v-if="item.main_image_url" :alt="item.title" :src="item.main_image_url">
                     <span>{{ item.title }}</span>
 
-                </div>
+                </Link>
             </div>
 
 

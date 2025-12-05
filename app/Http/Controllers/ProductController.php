@@ -123,7 +123,22 @@ class ProductController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $user = Auth::user();
+        $product = $user->products()->where('id', $id)->with('images')->firstOrFail();
+
+
+        if ($product->image_path) {
+            $product->main_image_url = Storage::url($product->image_path);
+        }
+        $product->gallery_urls = $product->images->map(fn($image) => Storage::url($image->path));
+
+        return Inertia::render('Profile/Products/Edit', [
+            'layoutData' => [
+                'h1' => 'Редактировать товар "' . $product->title . '"',
+            ],
+            'product' => $product,
+
+        ]);
     }
 
     /**
