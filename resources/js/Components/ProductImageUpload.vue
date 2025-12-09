@@ -1,6 +1,6 @@
 <script setup>
-import {ref} from 'vue';
-
+import {computed, ref} from 'vue';
+// @todo сделать компонент способным к отображению замене добавлению и удалению фоток
 const props = defineProps({
     // Главное изображение (может быть null или строкой)
     existingMainImage: {
@@ -17,13 +17,50 @@ const props = defineProps({
         }
     },
 });
-
+// console.log(props.existingGallery);
 const emit = defineEmits(['update:mainImage', 'update:gallery', 'remove:existingImage']);
 
-// Главное изображение
-const mainPreview = ref(null);
+
+const mainPreview = ref(null);// Главное изображение
 const mainFile = ref(null);
 
+const newGalleryFiles = ref([]);
+const removedImageIds = ref([]);// ID удалённых существующих изображений
+const totalImages = computed(() => { // Общее количество изображений
+    return props.existingGallery.length - removedImageIds.value.length + newGalleryFiles.value.length;
+});
+
+const displayedImages = computed(() => {
+    // Существующие (без удалённых)
+    const existing = props.existingGallery
+        .filter(img => !removedImageIds.value.includes(img.id))
+        .map(img => ({
+            type: 'existing',
+            id: img.id,
+            url: img.full_url
+        }));
+
+    // Новые
+    const news = newGalleryFiles.value.map((file, index) => ({
+        type: 'new',
+        index,
+        url: URL.createObjectURL(file)
+    }));
+
+    return [...existing, ...news];
+});
+const canUploadMore = computed(() => totalImages.value < 5);
+
+// Загрузка новых файлов
+const handleGalleryImageChange = (e) => {
+    const files = Array.from(e.target.files);
+    const allowed = 5 - totalImages.value;
+    for (let i = 0; i < files.length && i < allowed; i++) {
+        newGalleryFiles.value.push(files[i]);
+    }
+    emit('update:galleryFiles', newGalleryFiles.value);
+    emit('update:removedImageIds', removedImageIds.value);
+};
 const handleMainImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -33,27 +70,16 @@ const handleMainImageChange = (e) => {
     }
 };
 
-// Галерея
-const galleryPreviews = ref([]);
-const galleryFiles = ref([]);
-
-const handleGalleryImageChange = (e) => {
-    const files = Array.from(e.target.files);
-    const totalImages = galleryPreviews.value.length + props.existingGallery.length;
-
-    for (let i = 0; i < files.length && totalImages + i < 5; i++) {
-        const file = files[i];
-        galleryFiles.value.push(file);
-        galleryPreviews.value.push(URL.createObjectURL(file));
+const removeImage = (image) => {
+    if (image.type === 'existing') {
+        removedImageIds.value.push(image.id);
+        emit('update:removedImageIds', [...removedImageIds.value]);
+    } else {
+        // Удаляем новое изображение и пересоздаём массив для реактивности
+        newGalleryFiles.value.splice(image.index, 1);
+        newGalleryFiles.value = [...newGalleryFiles.value];
+        emit('update:galleryFiles', newGalleryFiles.value);
     }
-
-    emit('update:gallery', galleryFiles.value);
-};
-
-const removeGalleryImage = (index) => {
-    galleryPreviews.value.splice(index, 1);
-    galleryFiles.value.splice(index, 1);
-    emit('update:gallery', galleryFiles.value);
 };
 
 const removeExistingGalleryImage = (index) => {
@@ -97,46 +123,31 @@ const removeExistingGalleryImage = (index) => {
             <div class="mt-2 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
                 <!-- Существующие изображения -->
                 <div
-                    v-for="(image, index) in existingGallery"
-                    :key="'existing-' + index"
+                    v-for="(image, index) in displayedImages"
+                    :key="image.type === 'existing' ? `e-${image.id}` : `n-${image.index}`"
                     class="relative group"
                 >
                     <img
-                        :src="image.full_url"
+                        :src="image.url"
                         class="h-20 w-20 object-cover rounded border"
                     />
                     <button
                         class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition"
                         type="button"
-                        @click="removeExistingGalleryImage(index)"
-                    >
-                        ×
-                    </button>
-                </div>
-
-                <!-- Новые изображения -->
-                <div
-                    v-for="(preview, index) in galleryPreviews"
-                    :key="'new-' + index"
-                    class="relative group"
-                >
-                    <img :src="preview" class="h-20 w-20 object-cover rounded border"/>
-                    <button
-                        class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition"
-                        type="button"
-                        @click="removeGalleryImage(index)"
+                        @click="removeImage(image)"
                     >
                         ×
                     </button>
                 </div>
 
                 <!-- Кнопка + для загрузки -->
-                <div v-if="galleryPreviews.length + existingGallery.length < 5">
+                <div v-if="canUploadMore">
                     <label
                         class="flex items-center justify-center h-20 w-20 border-2 border-dashed border-gray-300 rounded cursor-pointer hover:border-indigo-400"
                     >
                         <span class="text-2xl text-gray-400">+</span>
                         <input
+                            :disabled="!canUploadMore"
                             accept="image/*"
                             class="hidden"
                             multiple

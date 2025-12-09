@@ -84,7 +84,7 @@ class ProductController extends Controller
 //            $product->main_image = null;
 //        }
         $product->main_image = Storage::url($product->image_path);
-//        dd($product);
+
         $product->gallery = $product->images->map(fn($image) => [
             'id' => $image->id,
             'full_url' => Storage::url($image->path),

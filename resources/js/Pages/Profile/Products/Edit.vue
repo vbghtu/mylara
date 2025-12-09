@@ -23,9 +23,16 @@ const form = useForm({
     material: props.product?.material || '',
     is_customizable: props.product?.is_customizable || true,
     main_image: null,
-    gallery: [],
+    gallery: props.product?.gallery || null
 })
 
+const handleMainImage = (file) => {
+    form.main_image = file;
+};
+
+const handleGallery = (files) => {
+    form.gallery = files;
+};
 
 </script>
 
@@ -35,7 +42,7 @@ const form = useForm({
             <div class="w-full flex flex-row justify-between">
                 <div class="w-1/2 flex flex-col  items-start">
                     <ProductImageUpload
-                        :existing-gallery="existingGallery"
+                        :existing-gallery="form.gallery"
                         :existing-main-image="existingMainImage"
                         @update:main-image="handleMainImage"
                         @update:gallery="handleGallery"
