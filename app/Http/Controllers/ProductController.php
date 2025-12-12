@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductRequest;
 use App\Models\Product;
+use App\Models\ProductImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -105,27 +106,43 @@ class ProductController extends Controller
      */
     public function update(ProductRequest $request, Product $product)
     {
+        $data = $request->validate;
 
-        $data = $request->validated();
-        if ($request->hasFile('main_image')) {
-            $data['image_path'] = $request->file('main_image')->store('products', 'public');
+        if ($request->has('removed_image_ids')) {
+            ProductImage::whereIn('id', $request->removed_image_ids)->delete();
         }
-//        $mainImagePath = null;
-//        if ($request->hasFile('main_image')) {
-//            $mainImagePath = $request->file('main_image')->store('products', 'public');
-//        }
-//        if ($request->hasFile('gallery')) {
-//            $galleryPaths = [];
-//            foreach ($request->file('gallery') as $image) {
-//                $galleryPaths[] = $image->store('products/gallery', 'public');
-//            }
-//            $data['gallery'] = json_encode($galleryPaths); // или сохраняй в отдельную таблицу
-//        }
-        dd($data);
+
+        // Загрузка новых
+        if ($request->hasFile('gallery')) {
+            foreach ($request->file('gallery') as $image) {
+                $product->images()->create([
+                    'path' => $image->store('products/gallery', 'public'),
+                ]);
+            }
+        }
+
+        // Замена главного изображения
+        if ($request->hasFile('main_image')) {
+            // ... загрузка и привязка как main
+        }
+
+
         $product->update($data);
 
         return back()->with('success', 'Товар обновлён!');
 //        dd($request);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        return Inertia::render('Profile/Products/Create', [
+            'layoutData' => [
+                'h1' => 'Новый продукт',
+            ],
+        ]);
     }
 
     /**
@@ -167,19 +184,6 @@ class ProductController extends Controller
         });
 
         return to_route('products.index')->with('success', 'Продукт успешно создан!');
-
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return Inertia::render('Profile/Products/Create', [
-            'layoutData' => [
-                'h1' => 'Новый продукт',
-            ],
-        ]);
     }
 
     /**

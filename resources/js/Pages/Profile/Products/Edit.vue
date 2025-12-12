@@ -23,7 +23,9 @@ const form = useForm({
     material: props.product?.material || '',
     is_customizable: props.product?.is_customizable || true,
     main_image: null,
-    gallery: props.product?.gallery || null
+    existingGallery: props.product?.gallery || null,
+    removed_gallery_ids: [],
+    gallery: [],
 })
 
 const handleMainImage = (file) => {
@@ -32,6 +34,13 @@ const handleMainImage = (file) => {
 
 const handleGallery = (files) => {
     form.gallery = files;
+};
+const handleRemoveGalleryImage = (ids) => {
+    form.removed_gallery_ids = ids;
+};
+
+const submit = () => {
+    form.put(route("products.update", props.product.id));
 };
 
 </script>
@@ -42,10 +51,11 @@ const handleGallery = (files) => {
             <div class="w-full flex flex-row justify-between">
                 <div class="w-1/2 flex flex-col  items-start">
                     <ProductImageUpload
-                        :existing-gallery="form.gallery"
-                        :existing-main-image="existingMainImage"
-                        @update:main-image="handleMainImage"
+                        :existingGallery="form.existingGallery"
+                        :existingMainImage="existingMainImage"
+                        @update:mainImage="handleMainImage"
                         @update:gallery="handleGallery"
+                        @update:removedImageIds="handleRemoveGalleryImage"
                     />
                 </div>
                 <div class="w-1/2 flex flex-col  items-start">

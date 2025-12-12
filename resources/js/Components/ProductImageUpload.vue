@@ -58,7 +58,7 @@ const handleGalleryImageChange = (e) => {
     for (let i = 0; i < files.length && i < allowed; i++) {
         newGalleryFiles.value.push(files[i]);
     }
-    emit('update:galleryFiles', newGalleryFiles.value);
+    emit('update:gallery', newGalleryFiles.value);
     emit('update:removedImageIds', removedImageIds.value);
 };
 const handleMainImageChange = (e) => {
@@ -78,7 +78,7 @@ const removeImage = (image) => {
         // Удаляем новое изображение и пересоздаём массив для реактивности
         newGalleryFiles.value.splice(image.index, 1);
         newGalleryFiles.value = [...newGalleryFiles.value];
-        emit('update:galleryFiles', newGalleryFiles.value);
+        emit('update:gallery', newGalleryFiles.value);
     }
 };
 
