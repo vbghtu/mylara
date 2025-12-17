@@ -106,10 +106,19 @@ class ProductController extends Controller
      */
     public function update(ProductRequest $request, Product $product)
     {
-        $data = $request->validate;
+//        dd($request);
+        $data = $request->validated();
+        //@todo доделать обработку ошибок  на типы файлов в первую очередь
+        if ($request->has('removed_gallery_ids')) {
+            $imagesToDelete = ProductImage::whereIn('id', $request->removed_gallery_ids)->get();
 
-        if ($request->has('removed_image_ids')) {
-            ProductImage::whereIn('id', $request->removed_image_ids)->delete();
+            foreach ($imagesToDelete as $image) {
+                // Удаляем файл с диска
+                if (Storage::disk('public')->exists($image->path)) {
+                    Storage::disk('public')->delete($image->path);
+                }
+                $image->delete();
+            }
         }
 
         // Загрузка новых
@@ -123,14 +132,16 @@ class ProductController extends Controller
 
         // Замена главного изображения
         if ($request->hasFile('main_image')) {
-            // ... загрузка и привязка как main
-        }
+            if ($product->image_path) {
+                Storage::disk('public')->delete($product->image_path);
+            }
 
+            $data['image_path'] = $request->file('main_image')->store('products', 'public');
+        }
 
         $product->update($data);
 
         return back()->with('success', 'Товар обновлён!');
-//        dd($request);
     }
 
     /**

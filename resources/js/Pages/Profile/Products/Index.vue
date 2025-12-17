@@ -22,7 +22,7 @@ const props = defineProps({
                 <Link v-for="item in props.products.data.data"
                       :key="item.id"
                       :href="route('products.edit', item.id)"
-                      class="item"
+                      class="item max-w-40"
                 >
                     <img v-if="item.main_image_url" :alt="item.title" :src="item.main_image_url">
                     <span>{{ item.title }}</span>

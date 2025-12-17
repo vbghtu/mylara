@@ -4,21 +4,47 @@ const field = defineModel({
     type: Boolean,
     default: false,
 });
+defineProps({
+    id: {
+        type: String,
+        required: true,
+    },
+    name: {
+        type: String,
+        required: true,
+    },
+    type: {
+        type: String,
+        default: 'text'
+    },
+    error: String
+})
 
-// defineProps({
-//     modelValue: {
-//         type: Boolean,
-//         default: false,
-//     },
-// });
 </script>
 
 <template>
-    <input
-        :checked="field"
-        class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
-        type="checkbox"
-    >
+    <!--    @todo рихтануть верстку-->
+    <div class="mb-6 w-full">
+        <label :for="id" class="block mb-2 text-sm font-medium text-gray-900  ">{{ name }}</label>
+        <input
+            :id="id"
+            :checked="field"
+            :class="['border','w-full' ,{'!ring-red-500': error}]"
+            type="checkbox"
+        >
+        <transition
+            enter-active-class="transition ease-out duration-300"
+            enter-from-class="opacity-0"
+            enter-to-class="opacity-100"
+            leave-active-class="transition ease-in duration-200"
+            leave-from-class="opacity-100"
+            leave-to-class="opacity-0"
+        >
+            <small v-if="error" class="error block mt-1 text-sm">
+                {{ error }}
+            </small>
+        </transition>
+    </div>
 </template>
 
 <style scoped>

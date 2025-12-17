@@ -5,6 +5,7 @@ import TextInput from "../../../Components/TextInput.vue";
 import PrimaryButton from "../../../Components/PrimaryButton.vue";
 import TiptapEditor from "../../../Components/TiptapEditor.vue";
 import ProductImageUpload from "../../../Components/ProductImageUpload.vue";
+import Checkbox from "../../../Components/Checkbox.vue";
 
 const props = defineProps({
     product: {
@@ -22,7 +23,7 @@ const form = useForm({
     is_available: props.product?.is_available || true,
     material: props.product?.material || '',
     is_customizable: props.product?.is_customizable || true,
-    main_image: null,
+    main_image: props.product?.main_image || null,
     existingGallery: props.product?.gallery || null,
     removed_gallery_ids: [],
     gallery: [],
@@ -52,7 +53,7 @@ const submit = () => {
                 <div class="w-1/2 flex flex-col  items-start">
                     <ProductImageUpload
                         :existingGallery="form.existingGallery"
-                        :existingMainImage="existingMainImage"
+                        :existingMainImage="form.main_image"
                         @update:mainImage="handleMainImage"
                         @update:gallery="handleGallery"
                         @update:removedImageIds="handleRemoveGalleryImage"
@@ -97,20 +98,21 @@ const submit = () => {
             />
 
             <div class="w-full flex flex-row items-start">
-                <TextInput
+   
+                <Checkbox
                     id="is_customizable"
                     v-model="form.is_customizable"
                     :error="$page.props.errors.is_customizable"
                     name="Можно под заказ"
                     type="checkbox"
-                ></TextInput>
-                <TextInput
+                ></Checkbox>
+                <Checkbox
                     id="is_available"
                     v-model="form.is_available"
                     :error="$page.props.errors.is_available"
                     name="Доступно"
                     type="checkbox"
-                ></TextInput>
+                ></Checkbox>
             </div>
             <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing" class="ml-4">
                 Сохранить
