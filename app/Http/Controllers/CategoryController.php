@@ -48,4 +48,8 @@ class CategoryController extends Controller
 
         return back()->with('success', 'Категория удалена');
     }
+
+    public function edit(Category $category)
+    {
+    }
 }
