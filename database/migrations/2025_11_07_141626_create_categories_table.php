@@ -12,10 +12,20 @@ return new class extends Migration {
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('slug')->unique();
+            $table->string('name', 255);
+            $table->string('slug', 255);
             $table->text('description')->nullable();
+            $table->string('meta_description', 255)->nullable();
+            $table->string('meta_title', 255)->nullable();
+            $table->unsignedBigInteger('parent_id')->nullable();
             $table->timestamps();
+
+            $table->foreign('parent_id')
+                ->references('id')
+                ->on('categories')
+                ->onDelete('set null');
+
+            $table->unique(['slug', 'parent_id']);
         });
     }
 
