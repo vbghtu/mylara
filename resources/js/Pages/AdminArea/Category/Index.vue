@@ -40,7 +40,7 @@ const deleteCategory = (id) => {
                             <p class="text-gray-500 w-8 sm:w-16">{{ cat.id }}</p>
                             <h3 class="font-medium">{{ cat.name }}</h3>
                         </div>
-                        <div class="space-x-4 text-right">
+                        <div class="space-x-4 text-right flex items-center">
                             <Link :href="route('categories.edit', cat.id)"
                                   class="text-sm font-medium text-blue-600 dark:text-blue-500 hover:underline whitespace-nowrap">
                                 <Edit class="w-5 h-5"/>

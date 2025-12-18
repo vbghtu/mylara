@@ -73,16 +73,6 @@ class ProductController extends Controller
         $user = Auth::user();
         $product = $user->products()->where('id', $id)->with('images')->firstOrFail();
 
-
-//        if ($product->image_path) {
-//            $product->main_image = [
-//                'id' => 'main_image',
-//                'full_url' => Storage::url($product->image_path),
-//                'alt' => '',
-//            ];
-//        } else {
-//            $product->main_image = null;
-//        }
         $product->main_image = Storage::url($product->image_path);
 
         $product->gallery = $product->images->map(fn($image) => [
@@ -139,7 +129,7 @@ class ProductController extends Controller
 
         $product->update($data);
 
-        return redirect()->back()->with('success', 'Товар обновлён!');
+        return back()->with('success', 'Товар обновлён!');
     }
 
     /**

@@ -21,6 +21,9 @@ const flash = computed(() => usePage().props.flash);
         <div v-if="flash.success" class="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg">
             {{ flash.success }}
         </div>
+        <div v-if="flash.error" class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg">
+            {{ flash.error }}
+        </div>
         <!-- Сюда вставится конкретная страница: Index.vue, Create.vue и т.д. -->
         <slot/>
     </div>

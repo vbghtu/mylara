@@ -37,4 +37,15 @@ class CategoryController extends Controller
             ],
         ]);
     }
+
+    public function destroy(Category $category)
+    {
+        if ($category->products()->exists()) {
+            return back()->with('error', 'Невозможно удалить категорию: в ней есть товары.');
+        }
+
+        $category->delete();
+
+        return back()->with('success', 'Категория удалена');
+    }
 }
