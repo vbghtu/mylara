@@ -52,6 +52,7 @@ const submit = () => {
             <div class="w-full flex flex-row justify-between">
                 <div class="w-1/2 flex flex-col  items-start">
                     <ProductImageUpload
+                        :errors="form.errors"
                         :existingGallery="form.existingGallery"
                         :existingMainImage="form.main_image"
                         @update:mainImage="handleMainImage"

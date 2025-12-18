@@ -7,7 +7,6 @@ const props = defineProps({
         type: String,
         default: null,
     },
-
     // Дополнительные фото: массив объектов ИЛИ пустой массив
     existingGallery: {
         type: Array,
@@ -16,8 +15,27 @@ const props = defineProps({
             return value.every(item => typeof item === 'object' && item.full_url);
         }
     },
+    errors: {
+        type: Object,
+        default: () => ({})
+    }
 });
-// console.log(props.existingGallery);
+
+// Ошибки для главного изображения
+const mainImageError = computed(() => props.errors.main_image);
+
+// Ошибки для галереи: соберём все, что начинается с "gallery."
+const galleryErrors = computed(() => {
+    const errs = [];
+    for (const key in props.errors) {
+        if (key.startsWith('gallery.')) {
+            errs.push(props.errors[key]);
+        }
+    }
+    return errs;
+});
+
+
 const emit = defineEmits(['update:mainImage', 'update:gallery', 'remove:existingImage']);
 
 
@@ -115,6 +133,9 @@ const removeExistingGalleryImage = (index) => {
                 />
             </div>
             <p class="mt-1 text-sm text-gray-500">JPG, PNG до 2 МБ</p>
+            <p v-if="mainImageError" class="mt-1 text-sm text-red-600">
+                {{ mainImageError }}
+            </p>
         </div>
 
         <!-- Галерея (до 5 изображений) -->
@@ -158,6 +179,11 @@ const removeExistingGalleryImage = (index) => {
                 </div>
             </div>
             <p class="mt-1 text-sm text-gray-500">Можно загрузить до 5 изображений</p>
+            <div v-if="galleryErrors.length" class="mt-1 space-y-1">
+                <p v-for="(error, i) in galleryErrors" :key="i" class="text-sm text-red-600">
+                    {{ error }}
+                </p>
+            </div>
         </div>
     </div>
 </template>

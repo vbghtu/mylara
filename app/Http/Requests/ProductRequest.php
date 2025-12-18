@@ -25,7 +25,6 @@ class ProductRequest extends FormRequest
         $productId = $this->route('product');
 
         return [
-//            'user_id' => ['required', 'max:100', 'exists:users,id',],
             'category_id' => ['required', 'exists:categories,id'],
             'title' => ['required', 'string', 'max:255'],
             'image_path' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
