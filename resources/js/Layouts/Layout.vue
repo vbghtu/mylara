@@ -63,8 +63,7 @@ const layoutData = computed(() => page.props.layoutData || {});
                                         <Link
                                             v-if="user"
                                             :href="route('products.create')"
-                                            class="cursor-pointer text-gray-700
-                                    font-medium px-4 py-2"
+                                            class="cursor-pointer text-gray-700 w-full mt-2 font-medium px-4 py-2"
                                         >
                                             Создать товар
                                         </Link>
@@ -73,10 +72,18 @@ const layoutData = computed(() => page.props.layoutData || {});
                                         <Link
                                             v-if="user"
                                             :href="route('products.index')"
-                                            class="cursor-pointer text-gray-700
-                                    font-medium px-4 py-2"
+                                            class="cursor-pointer text-gray-700 w-full mt-2  font-medium px-4 py-2"
                                         >
                                             мои товары
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link
+                                            v-if="user"
+                                            :href="route('categories.index')"
+                                            class="cursor-pointer text-gray-700 w-full mt-2 font-medium px-4 py-2"
+                                        >
+                                            категории
                                         </Link>
                                     </li>
                                 </ul>

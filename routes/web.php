@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
@@ -34,7 +35,6 @@ Route::middleware(['web'])->group(function () {
     Route::post('reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
 
     Route::get('/', [MainController::class, 'index'])->name('home');
-
 });
 
 // только авторизированным не зависимо от роли
@@ -51,13 +51,13 @@ Route::middleware(['auth', 'role:admin,moderator,seller'])->group(function () {
         ->name('products.index.page');
 
     Route::resource('products', ProductController::class);
-
-
 });
 
-//Route::middleware(['auth', 'role:admin,moderator'])->group(function () {
-//    Route::get('/moderate', function () {
-//        return 'Модерация';
-//    });
-//});
+Route::middleware(['auth', 'role:admin,moderator'])->group(function () {
+    Route::get('/categories/page/{page}', [CategoryController::class, 'index'])
+        ->where('page', '[1-9][0-9]*')
+        ->name('categories.index.page');
+
+    Route::resource('categories', CategoryController::class);
+});
 

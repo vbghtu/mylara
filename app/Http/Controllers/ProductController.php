@@ -21,7 +21,6 @@ class ProductController extends Controller
         $user = Auth::user();
         $perPage = config('app.pagination.products_per_page');
 
-
 // @todo добавить категории
         $products = $user->products()
             ->with('images')

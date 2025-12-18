@@ -125,6 +125,7 @@ return [
 
     'pagination' => [
         'products_per_page' => env('PRODUCTS_PER_PAGE', 15),
+        'category_per_page' => env('CATEGORY_PER_PAGE', 15),
     ],
 
 ];
