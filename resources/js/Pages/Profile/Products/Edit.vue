@@ -98,7 +98,7 @@ const submit = () => {
             />
 
             <div class="w-full flex flex-row items-start">
-   
+
                 <Checkbox
                     id="is_customizable"
                     v-model="form.is_customizable"

@@ -46,7 +46,16 @@ class HandleInertiaRequests extends Middleware
                 ] : null,
             ],
             'flash' => [
-                'message' => fn() => $request->session()->get('message')
+                'message' => fn() => $request->session()->get('message'),
+                'success' => fn() => $request->session()->get('success'),
+                'error' => fn() => $request->session()->get('error'),
+                'warning' => fn() => $request->session()->get('warning'),
+                'info' => fn() => $request->session()->get('info'),
+            ],
+            'GlobalData' => [
+                'currentDate' => now()->format('d.m.Y'),
+                'appName' => config('app.name'),
+                // Другие общие данные
             ],
         ];
     }

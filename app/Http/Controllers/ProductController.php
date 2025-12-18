@@ -106,7 +106,6 @@ class ProductController extends Controller
      */
     public function update(ProductRequest $request, Product $product)
     {
-//        dd($request);
         $data = $request->validated();
         //@todo доделать обработку ошибок  на типы файлов в первую очередь
         if ($request->has('removed_gallery_ids')) {
@@ -141,7 +140,13 @@ class ProductController extends Controller
 
         $product->update($data);
 
-        return back()->with('success', 'Товар обновлён!');
+//        session()->flash('success', 'Товар обновлён!');
+        session()->flash('success', 'Товар обновлён!');
+//        dd(session()->all());
+        return redirect()->back()->with('success', 'Товар обновлён!');
+//        return redirect()->route('products.edit')->with('success', 'Чарт создан!');
+//        return redirect()->route('products.edit', ['product' => $product->id])->with('success', 'Чарт создан!');
+//        return to_route('products.edit', ['product' => $product->id])->with('success', 'Продукт успешно создан!');
     }
 
     /**

@@ -23,13 +23,12 @@ defineProps({
 </script>
 
 <template>
-    <!--    @todo рихтануть верстку-->
-    <div class="mb-6 w-full">
-        <label :for="id" class="block mb-2 text-sm font-medium text-gray-900  ">{{ name }}</label>
+    <div class="mb-6 w-full flex-row flex">
+        <label :for="id" class="pointer w-8/12 block mb-2 text-sm font-medium text-gray-900  ">{{ name }}</label>
         <input
             :id="id"
             :checked="field"
-            :class="['border','w-full' ,{'!ring-red-500': error}]"
+            :class="['border','w-4/12','pointer' ,{'!ring-red-500': error}]"
             type="checkbox"
         >
         <transition
