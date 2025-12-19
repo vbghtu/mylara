@@ -118,6 +118,10 @@ const submit = () => {
             <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing" class="ml-4">
                 Сохранить
             </PrimaryButton>
+            <Link :href="route('products.index')" class="btn-secondary">
+                Отмена
+            </Link>
+
         </form>
     </ProductsLayout>
 </template>

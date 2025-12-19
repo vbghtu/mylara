@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -51,5 +52,34 @@ class CategoryController extends Controller
 
     public function edit(Category $category)
     {
+        $categories = Category::all(['id', 'name']);
+
+        return Inertia::render('AdminArea/Category/Edit', [
+            'layoutData' => [
+                'h1' => 'Редактировать категорию "' . $category->name . '"',
+            ],
+            'category' => $category,
+            'categories' => $categories,
+
+        ]);
+    }
+
+    public function update(CategoryRequest $request, Category $category)
+    {
+        $category->update($request->validated());
+
+        return back()->with('success', 'Категория обновлёна!');
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        return Inertia::render('Profile/Products/Create', [
+            'layoutData' => [
+                'h1' => 'Новый продукт',
+            ],
+        ]);
     }
 }
