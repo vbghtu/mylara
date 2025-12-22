@@ -10,6 +10,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SiteController;
 use Illuminate\Support\Facades\Route;
 
 //Route::get('/', function () {
@@ -35,6 +36,8 @@ Route::middleware(['web'])->group(function () {
     Route::post('reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
 
     Route::get('/', [MainController::class, 'index'])->name('home');
+    Route::get('/{categorySlug}', [SiteController::class, 'categories'])->name('category');
+    Route::get('product/{productSlug}', [SiteController::class, 'products'])->name('product');
 });
 
 // только авторизированным не зависимо от роли
