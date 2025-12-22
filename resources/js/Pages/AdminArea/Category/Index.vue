@@ -21,7 +21,13 @@ const deleteCategory = (id) => {
 
 <template>
     <AdminLayout>
-        <!--        <h1>Список Категорий</h1>-->
+        <div class="mt-4 mb-4 w-full flex justify-around">
+            <h1>Список Категорий</h1>
+            <Link :href="route('categories.create')"
+            >
+                Создать новую категорию
+            </Link>
+        </div>
         <div class="w-full ">
             <div class="bg-white shadow overflow-hidden sm:rounded-md">
                 <ul class="divide-y divide-gray-200" role="list">

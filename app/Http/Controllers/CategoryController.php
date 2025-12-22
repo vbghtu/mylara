@@ -64,11 +64,11 @@ class CategoryController extends Controller
         ]);
     }
 
-    public function update(CategoryRequest $request, Category $category)
+    public function store(CategoryRequest $request, Category $category)
     {
-        $category->update($request->validated());
+        $category->create($request->validated());
 
-        return back()->with('success', 'Категория обновлёна!');
+        return back()->with('success', 'Категория создана!');
     }
 
     /**
@@ -76,10 +76,20 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Profile/Products/Create', [
+        $categories = Category::all(['id', 'name']);
+
+        return Inertia::render('AdminArea/Category/Create', [
             'layoutData' => [
-                'h1' => 'Новый продукт',
+                'h1' => 'Новая Категория',
             ],
+            'categories' => $categories,
         ]);
+    }
+
+    public function update(CategoryRequest $request, Category $category)
+    {
+        $category->update($request->validated());
+
+        return back()->with('success', 'Категория обновлёна!');
     }
 }
