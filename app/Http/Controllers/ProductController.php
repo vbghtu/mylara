@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductRequest;
+use App\Http\Resources\ProductListResource;
 use App\Models\Product;
 use App\Models\ProductImage;
 use Illuminate\Http\Request;
@@ -23,16 +24,8 @@ class ProductController extends Controller
 
 // @todo добавить категории
         $products = $user->products()
-            ->with('images')
             ->orderBy('created_at', 'desc')
-            ->paginate($perPage, ['*'], 'page', $page) // сколько элементов на странице (например, 15)
-            ->through(function ($product) {
-                if ($product->image_path) {
-                    $product->main_image_url = Storage::url($product->image_path);
-                }
-                $product->gallery_urls = $product->images->map(fn($image) => Storage::url($image->path));
-                return $product;
-            });
+            ->paginate($perPage, ['*'], 'page', $page); // сколько элементов на странице (например, 15)
 
         $basePath = preg_replace('#/page/\d+$#', '', $request->url());
 
@@ -43,7 +36,7 @@ class ProductController extends Controller
                 'h1' => 'Мои продукты',
             ],
             'products' => [
-                'data' => $products,
+                'data' => ProductListResource::collection($products),
                 'meta' => [
                     'current_page' => $products->currentPage(),
                     'last_page' => $products->lastPage(),

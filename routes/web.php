@@ -21,25 +21,6 @@ Route::middleware([UserRole::ADMIN->value, UserRole::MODERATOR->value])->group(f
     Route::get('/adminarea/', [AdminController::class, 'index'])->name('admin.index');
 });
 
-// Всем посетителям
-Route::middleware(['web'])->group(function () {
-// Форма входа
-    Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
-    Route::post('login', [LoginController::class, 'login']);
-// Форма регистрации
-    Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
-    Route::post('register', [RegisterController::class, 'register']);
-
-    Route::get('forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
-    Route::post('forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
-    Route::get('reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
-    Route::post('reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
-
-    Route::get('/', [MainController::class, 'index'])->name('home');
-    Route::get('/{categorySlug}', [SiteController::class, 'categories'])->name('category');
-    Route::get('product/{productSlug}', [SiteController::class, 'products'])->name('product');
-});
-
 // только авторизированным не зависимо от роли
 Route::middleware('auth')->group(function () {
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
@@ -64,3 +45,26 @@ Route::middleware(['auth', 'role:admin,moderator'])->group(function () {
     Route::resource('categories', CategoryController::class);
 });
 
+
+// Всем посетителям
+Route::middleware(['web'])->group(function () {
+// Форма входа
+    Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
+    Route::post('login', [LoginController::class, 'login']);
+// Форма регистрации
+    Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+    Route::post('register', [RegisterController::class, 'register']);
+
+    Route::get('forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+    Route::post('forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+    Route::get('reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+    Route::post('reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
+
+
+    Route::get('/page/{page}', [MainController::class, 'index'])
+        ->where('page', '[1-9][0-9]*')
+        ->name('home.index.page');
+    Route::get('/', [MainController::class, 'index'])->name('home');
+    Route::get('/{categorySlug}', [SiteController::class, 'categories'])->name('category');
+    Route::get('product/{productSlug}', [SiteController::class, 'products'])->name('product');
+});

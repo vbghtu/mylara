@@ -7,7 +7,6 @@ import {route} from "ziggy-js";
 const props = defineProps({
     products: {
         type: Object,
-        default: () => []
     },
 });
 
