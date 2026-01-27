@@ -1,13 +1,12 @@
 <script setup>
-import {Link} from "@inertiajs/vue3";
+
 import {route} from "ziggy-js";
-import Paginator from "../../Components/Paginator.vue";
+import {Link} from "@inertiajs/vue3";
 
 const props = defineProps({
     layoutData: Array,
-    user: Array,
     categories: Object,
-    products: {
+    product: {
         type: Object,
         required: true
     }
@@ -35,20 +34,9 @@ const props = defineProps({
 
             <div class="md:w-9/12 bg-gray-200 p-4">
                 <div class="w-full flex gap-4">
-                    <Link v-for="item in props.products.data.data"
-                          :key="item.id"
-                          :href="route('product', item.slug)"
-                          class="item max-w-40"
-                    >
-                        <img v-if="item.main_image_url" :alt="item.title" :src="item.main_image_url">
-                        <span>{{ item.title }}</span>
-                    </Link>
+
                 </div>
 
-                <Paginator
-                    :navLink="false"
-                    :pageMeta=props.products.meta
-                />
 
             </div>
         </div>

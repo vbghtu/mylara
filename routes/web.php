@@ -66,5 +66,8 @@ Route::middleware(['web'])->group(function () {
         ->name('home.index.page');
     Route::get('/', [MainController::class, 'index'])->name('home');
     Route::get('/{categorySlug}', [SiteController::class, 'categories'])->name('category');
-    Route::get('product/{productSlug}', [SiteController::class, 'products'])->name('product');
+    Route::get('/{categorySlug}/page/{page}', [SiteController::class, 'categories'])
+        ->where('page', '[1-9][0-9]*')
+        ->name('category.page');
+    Route::get('product/{productSlug}', [SiteController::class, 'product'])->name('product');
 });

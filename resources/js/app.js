@@ -8,7 +8,7 @@ import Layout from './Layouts/Layout.vue';
 
 
 createInertiaApp({
-    title: (title) => `Mylara ${title}`,
+    title: (title) => `${title}`,
     resolve: name => {
         const pages = import.meta.glob('./Pages/**/*.vue', {eager: true})
         let page = pages[`./Pages/${name}.vue`];

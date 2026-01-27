@@ -1,18 +1,17 @@
 <script setup>
-import {Link} from "@inertiajs/vue3";
+
 import {route} from "ziggy-js";
 import Paginator from "../../Components/Paginator.vue";
+import {Link} from "@inertiajs/vue3";
 
 const props = defineProps({
     layoutData: Array,
-    user: Array,
     categories: Object,
     products: {
         type: Object,
         required: true
     }
 });
-
 </script>
 
 <template>

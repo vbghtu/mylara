@@ -26,6 +26,8 @@ class MainController extends Controller
             'user' => $user,
             'layoutData' => [
                 'h1' => 'Главная',
+                'metaTitle' => 'Главная — Мой магазин',
+                'metaDescription' => 'Лучшие товары по низким ценам',
             ],
             'categories' => $categories,
             'products' => [
