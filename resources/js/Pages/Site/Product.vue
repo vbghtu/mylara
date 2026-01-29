@@ -11,7 +11,7 @@ const props = defineProps({
         required: true
     }
 });
-
+console.log(props.product.data.gallery);
 </script>
 
 <template>
@@ -33,8 +33,23 @@ const props = defineProps({
             </div>
 
             <div class="md:w-9/12 bg-gray-200 p-4">
-                <div class="w-full flex gap-4">
+                <div class="w-full flex gap-4 flex-col">
+                    <div class="gallery">
+                        <div v-for="image in props.product.data.gallery" :key="image.id || 'main'"
+                             class="gallery__item">
+                            <img :alt="image.alt" :src="image.full_url">
+                        </div>
+                    </div>
 
+                    <div class="description" v-html="props.product.data.description">
+
+                    </div>
+                    <div class="parametrs">
+                        <p>Материал: {{ props.product.data.material }}</p>
+                        <p>Доступен для заказа: {{ props.product.data.is_available }}</p>
+                        <p>Можно ли изменить комплектацию: {{ props.product.data.is_customizable }}</p>
+
+                    </div>
                 </div>
 
 
@@ -44,5 +59,21 @@ const props = defineProps({
 </template>
 
 <style scoped>
+.gallery {
+    height: 200px;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
 
+.gallery__item {
+    max-width: 200px;
+    min-width: 0;
+    position: relative;
+    display: flex;
+}
+
+.gallery__item img {
+    width: 100%
+}
 </style>

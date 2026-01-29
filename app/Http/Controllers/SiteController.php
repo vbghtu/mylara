@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ProductItemResource;
 use App\Http\Resources\ProductListResource;
 use App\Models\Category;
 use App\Models\Product;
@@ -45,8 +46,9 @@ class SiteController extends Controller
 
     public function product(string $productSlug): InertiaResponse
     {
-        $product = Product::where('slug', $productSlug)->with('images')->firstOrFail();
+        $product = Product::where('slug', $productSlug)->with(['images', 'user'])->firstOrFail();
         $categories = Category::all();
+
 
         return inertia('Site/Product', [
             'layoutData' => [
@@ -55,7 +57,7 @@ class SiteController extends Controller
                 'metaDescription' => $product->title . ' купить заказать описание',
             ],
             'categories' => $categories,
-            'product' => $product //@todo сделать ресурс
+            'product' => new ProductItemResource($product) //@todo сделать ресурс
         ]);
     }
 }

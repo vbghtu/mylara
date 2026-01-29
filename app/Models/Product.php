@@ -22,9 +22,14 @@ class Product extends Model
         'image_path',
     ];
 
-    public function products()
+    public function category()
     {
-        return $this->hasMany(Product::class, 'category_id');
+        return $this->hasMany(Category::class, 'category_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function images()
