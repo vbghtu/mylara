@@ -7,3 +7,5 @@
 ## Запуск Деплой
 
 - php artisan storage:link
+- php artisan migration
+- php artisan seed #опционально если нужны тестовые данные
