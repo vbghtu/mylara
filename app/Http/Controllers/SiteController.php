@@ -53,11 +53,11 @@ class SiteController extends Controller
         return inertia('Site/Product', [
             'layoutData' => [
                 'h1' => $product->title,
-                'metaTitle' => $product->title . ' купить заказать',
-                'metaDescription' => $product->title . ' купить заказать описание',
+                'metaTitle' => $product->meta_title,
+                'metaDescription' => $product->meta_description,
             ],
             'categories' => $categories,
-            'product' => new ProductItemResource($product) //@todo сделать ресурс
+            'product' => new ProductItemResource($product)
         ]);
     }
 }

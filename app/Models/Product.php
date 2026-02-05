@@ -20,6 +20,8 @@ class Product extends Model
         'material',
         'is_customizable',
         'image_path',
+        'meta_title',
+        'meta_description',
     ];
 
     public function category()

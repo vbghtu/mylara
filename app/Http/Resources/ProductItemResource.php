@@ -24,6 +24,8 @@ class ProductItemResource extends JsonResource
             'is_available' => $this->is_available,
             'material' => $this->material,
             'is_customizable' => $this->is_customizable,
+            'meta_title' => $this->meta_title,
+            'meta_description' => $this->meta_description,
 
             'gallery' => $this->whenLoaded('images', function () {
                 $galleryItems = [];
