@@ -50,6 +50,13 @@ console.log(props.product.data.gallery);
                         <p>Можно ли изменить комплектацию: {{ props.product.data.is_customizable }}</p>
                         <p>Цена: {{ props.product.data.price }}</p>
                         <!--@todo категории со ссылкой-->
+                        <p>Категория:
+                            <Link :href="route('category', props.product.data.category.slug ) ">
+                                {{ props.product.data.category.name }}
+                            </Link>
+
+                        </p>
+
                     </div>
                 </div>
 

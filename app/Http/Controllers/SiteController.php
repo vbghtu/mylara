@@ -46,9 +46,8 @@ class SiteController extends Controller
 
     public function product(string $productSlug): InertiaResponse
     {
-        $product = Product::where('slug', $productSlug)->with(['images', 'user'])->firstOrFail();
+        $product = Product::where('slug', $productSlug)->with(['images', 'user', 'category'])->firstOrFail();
         $categories = Category::all();
-
 
         return inertia('Site/Product', [
             'layoutData' => [
