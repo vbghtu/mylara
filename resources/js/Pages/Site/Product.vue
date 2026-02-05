@@ -48,6 +48,7 @@ console.log(props.product.data.gallery);
                         <p>Материал: {{ props.product.data.material }}</p>
                         <p>Доступен для заказа: {{ props.product.data.is_available }}</p>
                         <p>Можно ли изменить комплектацию: {{ props.product.data.is_customizable }}</p>
+                        <p>Цена: {{ props.product.data.price }}</p>
 
                     </div>
                 </div>
