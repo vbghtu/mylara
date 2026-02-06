@@ -7,6 +7,7 @@ import {Link} from "@inertiajs/vue3";
 const props = defineProps({
     layoutData: Array,
     categories: Object,
+    category: Object,
     products: {
         type: Object,
         required: true
@@ -43,7 +44,7 @@ const props = defineProps({
                         <span>{{ item.title }}</span>
                     </Link>
                 </div>
-
+                <div class="flex w-full mt-5">{{ props.category.description }}</div>
                 <Paginator
                     :navLink="false"
                     :pageMeta=props.products.meta
