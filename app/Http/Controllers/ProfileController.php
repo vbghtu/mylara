@@ -41,15 +41,12 @@ class ProfileController extends Controller
             if ($user->profile_photo) {
                 Storage::disk('public')->delete($user->profile_photo);
             }
-
             $data['profile_photo'] = $request->file('photo')->store('profile-photos', 'public');
         }
 
         if (!empty($data)) {
             $user->update($data);
         }
-//        return redirect()->route('profile.show', ['user' => $user])->with('success', 'Фото профиля обновлено!');
         return back()->with('success', 'Профиль обновлён!');
-
     }
 }
