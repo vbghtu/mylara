@@ -18,7 +18,8 @@ const flash = computed(() => usePage().props.flash);
 
 <template>
     <NavBar :data="navigation"/>
-    <div class="max-w-7xl mx-auto flex justify-start flex-col py-4 content">
+    <!--    <div class="max-w-7xl mx-auto flex justify-start flex-col py-4 content">-->
+    <div class="flex justify-start py-4 content mx-auto max-w-12xl">
         <div v-if="flash.success" class="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg">
             {{ flash.success }}
         </div>

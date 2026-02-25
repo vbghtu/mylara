@@ -49,7 +49,6 @@ const props = defineProps({
                     :navLink="false"
                     :pageMeta=props.products.meta
                 />
-
             </div>
         </div>
     </div>
