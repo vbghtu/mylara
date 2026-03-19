@@ -10,7 +10,7 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('showcase', function (Blueprint $table) {
+        Schema::create('showcases', function (Blueprint $table) {
             $table->id();
             $table->foreignId('seller_id')->constrained('users')->onDelete('cascade');
             $table->string('slug')->unique()->nullable();
@@ -56,7 +56,7 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::table('showcase', function (Blueprint $table) {
+        Schema::table('showcases', function (Blueprint $table) {
             $table->dropForeign(['seller_id']);
         });
         Schema::dropIfExists('showcase');

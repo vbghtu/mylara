@@ -10,6 +10,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ShowcaseController;
 use App\Http\Controllers\SiteController;
 use Illuminate\Support\Facades\Route;
 
@@ -60,6 +61,14 @@ Route::middleware(['web'])->group(function () {
     Route::get('reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
     Route::post('reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
 
+    /* магазины*/
+    Route::get('/{showcase}', [ShowcaseController::class, 'index'])
+        ->name('showcase');
+
+    Route::get('/{showcase}/page/{page}', [ShowcaseController::class, 'index'])
+        ->where('page', '[1-9][0-9]*')
+        ->name('showcase.page');
+
 
     Route::get('/page/{page}', [MainController::class, 'index'])
         ->where('page', '[1-9][0-9]*')
@@ -70,4 +79,6 @@ Route::middleware(['web'])->group(function () {
         ->where('page', '[1-9][0-9]*')
         ->name('category.page');
     Route::get('product/{productSlug}', [SiteController::class, 'product'])->name('product');
+
+
 });
