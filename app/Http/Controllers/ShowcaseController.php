@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\ProductItemResource;
 use App\Http\Resources\ProductListResource;
-use App\Models\Category;
-use App\Models\Product;
 use App\Models\showcase;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
