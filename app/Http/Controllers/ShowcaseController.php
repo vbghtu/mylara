@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\ProductItemResource;
 use App\Http\Resources\ProductListResource;
-use App\Models\showcase;
+use App\Http\Resources\SellerResource;
+use App\Models\Showcase;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response as InertiaResponse;
@@ -17,7 +18,21 @@ class ShowcaseController extends Controller
             ->where('slug', $showCaseSlug)
             ->firstOrFail();
 
-//        dd(ProductListResource::collection($showCase->products));
+        $sellerResource = new SellerResource($showCase->seller);
+        $sellerResource->additional([
+            'is_active' => $showCase->is_active,
+            'showcase_logo' => $showCase->logo ? asset('storage/'.$showCase->logo) : null,
+            'subscription_end' => $showCase->subscription_end?->format('Y-m-d'),
+            'contact_email' => $showCase->contact_email,
+            'contact_phone' => $showCase->contact_phone,
+        ]);
+
+//@todo добавить проверку на активность витрины через Policy (?)!!!
+//@todo добавить проверку на активность подписки внутри витрины и если да что то дбавлять
+//@todo в зависимости от активности подписки выводить баннер (?)
+
+
+
         return inertia('showCase/Index', [
             'layoutData' => [
                 'h1' => $showCase->title,
@@ -27,7 +42,7 @@ class ShowcaseController extends Controller
 //            'category' => $category, // неуверен надо ли оно
 //            'categories' => $categories,
             'products' => [
-                'data' => ProductListResource::collection($showCase->products),
+                'data' => ProductListResource::collection($showCase->products)
 //                'meta' => [
 //                    'current_page' => $products->currentPage(),
 //                    'last_page' => $products->lastPage(),
@@ -38,6 +53,10 @@ class ShowcaseController extends Controller
 //                    'path' => $basePath, // ← критически важно!
 //                ],
             ],
+            'user' => array_merge(
+                $sellerResource->toArray(request()),
+                $sellerResource->additional
+            ),
         ]);
 
     }

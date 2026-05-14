@@ -2,6 +2,7 @@
 import {Link} from "@inertiajs/vue3";
 import {route} from "ziggy-js";
 import Paginator from "../../Components/Paginator.vue";
+import {onMounted} from "vue";
 
 const props = defineProps({
     layoutData: Array,
@@ -9,9 +10,18 @@ const props = defineProps({
     products: {
         type: Object,
         required: true
+    },
+    user: {
+        type: Object,
+        required: true
     }
 });
 
+//@todo вывести лого, баннер и в зависмостиот активности подписки  что то еще
+onMounted(() => {
+    console.log('👤 user:', props.user)
+
+})
 </script>
 
 <template>
@@ -22,7 +32,11 @@ const props = defineProps({
 
     <div class="mx-auto max-w-12xl w-full px-4">
         <div class="flex flex-col md:flex-row gap-6">
-<!--            <div class="md:w-3/12 bg-gray-100 p-4 max-h-dvh overflow-scroll">-->
+            <div class="md:w-3/12 bg-gray-100 p-4 max-h-dvh overflow-scroll">
+            {{props.user.name}}
+                {{props.user.contact_phone}}
+                {{props.user.contact_email}}
+                <img :src="props.user.avatar" >
 <!--                <ul>-->
 <!--                    <li v-for="cat in props.categories">-->
 <!--                        <Link :href="route('category', cat.slug ) ">-->
@@ -30,9 +44,9 @@ const props = defineProps({
 <!--                        </Link>-->
 <!--                    </li>-->
 <!--                </ul>-->
-<!--            </div>-->
+            </div>
 
-            <div class="md:w-full bg-gray-200 p-4">
+            <div class="md:w-7/12 bg-gray-200 p-4">
                 <div class="grid grid-cols-8 gap-4">
                     <Link v-for="item in props.products.data.data"
                           :key="item.id"

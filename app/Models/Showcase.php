@@ -4,10 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class showcase extends Model
+class Showcase extends Model
 {
     protected $fillable = [
-        'id',
         'seller_id',
         'slug',
         'title',

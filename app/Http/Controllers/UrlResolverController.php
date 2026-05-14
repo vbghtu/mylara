@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
-use App\Models\showcase;
+use App\Models\Showcase;
 use Illuminate\Http\Request;
 
 class UrlResolverController extends Controller
