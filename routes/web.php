@@ -12,6 +12,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ShowcaseController;
 use App\Http\Controllers\SiteController;
+use App\Http\Controllers\UrlResolverController;
 use Illuminate\Support\Facades\Route;
 
 //Route::get('/', function () {
@@ -61,24 +62,21 @@ Route::middleware(['web'])->group(function () {
     Route::get('reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
     Route::post('reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
 
-    /* магазины*/
-    Route::get('/{showcase}', [ShowcaseController::class, 'index'])
-        ->name('showcase');
-
-    Route::get('/{showcase}/page/{page}', [ShowcaseController::class, 'index'])
-        ->where('page', '[1-9][0-9]*')
-        ->name('showcase.page');
-
 
     Route::get('/page/{page}', [MainController::class, 'index'])
         ->where('page', '[1-9][0-9]*')
         ->name('home.index.page');
     Route::get('/', [MainController::class, 'index'])->name('home');
-    Route::get('/{categorySlug}', [SiteController::class, 'categories'])->name('category');
-    Route::get('/{categorySlug}/page/{page}', [SiteController::class, 'categories'])
-        ->where('page', '[1-9][0-9]*')
-        ->name('category.page');
     Route::get('product/{productSlug}', [SiteController::class, 'product'])->name('product');
 
+    /* единный резолвер для категорий и витрин + для статических страниц в будующем*/
+    Route::get('/{slug}', [UrlResolverController::class, 'resolve'])
+        ->name('slug.resolve');
+
+    Route::get('/{slug}/page/{page}', [UrlResolverController::class, 'resolve'])
+        ->where('page', '[1-9][0-9]*') // только числа без ведущего нуля
+        ->name('slug.resolve.page');
+
+    /* END */
 
 });

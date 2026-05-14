@@ -26,7 +26,7 @@ const props = defineProps({
             <div class="md:w-3/12 bg-gray-100 p-4 max-h-dvh overflow-scroll">
                 <ul>
                     <li v-for="cat in props.categories">
-                        <Link :href="route('category', cat.slug ) ">
+                        <Link :href="route('slug.resolve', cat.slug ) ">
                             {{ cat.name }}
                         </Link>
                     </li>

@@ -25,7 +25,7 @@ console.log(props.product.data.gallery);
             <div class="md:w-3/12 bg-gray-100 p-4 max-h-dvh overflow-scroll">
                 <ul>
                     <li v-for="cat in props.categories">
-                        <Link :href="route('category', cat.slug ) ">
+                        <Link :href="route('slug.resolve', cat.slug ) ">
                             {{ cat.name }}
                         </Link>
                     </li>
@@ -51,7 +51,7 @@ console.log(props.product.data.gallery);
                         <p>Цена: {{ props.product.data.price }}</p>
                         <!--@todo категории со ссылкой-->
                         <p>Категория:
-                            <Link :href="route('category', props.product.data.category.slug ) ">
+                            <Link :href="route('slug.resolve', props.product.data.category.slug ) ">
                                 {{ props.product.data.category.name }}
                             </Link>
 

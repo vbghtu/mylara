@@ -22,7 +22,7 @@ const props = defineProps({
 
     <div class="mx-auto max-w-12xl w-full px-4">
         <div class="flex flex-col md:flex-row gap-6">
-            <div class="md:w-3/12 bg-gray-100 p-4 max-h-dvh overflow-scroll">
+<!--            <div class="md:w-3/12 bg-gray-100 p-4 max-h-dvh overflow-scroll">-->
 <!--                <ul>-->
 <!--                    <li v-for="cat in props.categories">-->
 <!--                        <Link :href="route('category', cat.slug ) ">-->
@@ -30,9 +30,9 @@ const props = defineProps({
 <!--                        </Link>-->
 <!--                    </li>-->
 <!--                </ul>-->
-            </div>
+<!--            </div>-->
 
-            <div class="md:w-9/12 bg-gray-200 p-4">
+            <div class="md:w-full bg-gray-200 p-4">
                 <div class="grid grid-cols-8 gap-4">
                     <Link v-for="item in props.products.data.data"
                           :key="item.id"
