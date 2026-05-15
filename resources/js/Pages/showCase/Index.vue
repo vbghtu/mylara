@@ -46,7 +46,7 @@ onMounted(() => {
 <!--                </ul>-->
             </div>
 
-            <div class="md:w-7/12 bg-gray-200 p-4">
+            <div class="md:w-9/12 bg-gray-200 p-4">
                 <div class="grid grid-cols-8 gap-4">
                     <Link v-for="item in props.products.data.data"
                           :key="item.id"

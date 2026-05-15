@@ -31,4 +31,53 @@ class Showcase extends Model
     {
         return $this->belongsTo(User::class, 'seller_id');
     }
+
+    public function reviews()
+    {
+        return $this->morphMany(Review::class, 'reviewable');
+    }
+
+    //   общий рейтинг продавца
+//    public function getAvgRatingAttribute(): float
+//    {
+//        return Cache::remember("showcase:rating:{$this->id}", 3600, function () {
+//            // 1. Отзывы напрямую к витрине
+//            $showcaseAvg = $this->reviews()->approved()->avg('rating');
+//            $showcaseCount = $this->reviews()->approved()->count();
+//
+//            // 2. Отзывы ко всем товарам продавца
+//            $productStats = $this->products()
+//                ->join('reviews', 'products.id', '=', 'reviews.reviewable_id')
+//                ->where('reviews.reviewable_type', Product::class)
+//                ->where('reviews.status', 'approved')
+//                ->selectRaw('AVG(reviews.rating) as avg, COUNT(*) as count')
+//                ->first();
+//
+//            $productAvg = $productStats->avg ?? 0;
+//            $productCount = $productStats->count ?? 0;
+//
+//            // 3. Взвешенное среднее
+//            $total = $showcaseCount + $productCount;
+//            if ($total === 0) return 0.0;
+//
+//            $weighted = (($showcaseAvg * $showcaseCount) + ($productAvg * $productCount)) / $total;
+//            return round($weighted, 2);
+//        });
+//    }
+
+// общее количество отзывов продавца
+//    public function getReviewsCountAttribute(): int
+//    {
+//        return Cache::remember("showcase:reviews:{$this->id}", 3600, function () {
+//            // Отзывы к витрине + отзывы ко всем товарам
+//            $showcaseCount = $this->reviews()->approved()->count();
+//            $productCount = $this->products()
+//                ->join('reviews', 'products.id', '=', 'reviews.reviewable_id')
+//                ->where('reviews.reviewable_type', Product::class)
+//                ->where('reviews.status', 'approved')
+//                ->count();
+//
+//            return $showcaseCount + $productCount;
+//        });
+//    }
 }

@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Review;
+use App\Observers\ReviewObserver;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,7 +22,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //  @todo это тест сюда надо будет прокинуть меню инабор его поле чуть позже
+        Relation::morphMap([
+            'product' => \App\Models\Product::class,
+            'showcase' => \App\Models\Showcase::class,
+            // 'comment' => \App\Models\Comment::class,
+        ]);
+
+        Review::observe(ReviewObserver::class);
+
+
+        //  @todo это тест сюда надо будет прокинуть меню и набор его поле чуть позже
 
     }
 }
