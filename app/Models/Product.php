@@ -42,7 +42,7 @@ class Product extends Model
 
     public function reviews()
     {
-        return $this->morphMany(Review::class, 'reviewable');
+        return $this->morphMany(Review::class, 'reviewable')->approved();
     }
 
 // средний рейтинг товара (с кэшированием)

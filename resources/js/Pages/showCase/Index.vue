@@ -19,7 +19,7 @@ const props = defineProps({
 
 //@todo вывести лого, баннер и в зависмостиот активности подписки  что то еще
 onMounted(() => {
-    console.log('👤 user:', props.user)
+    // console.log('👤 user:', props.user)
 
 })
 </script>

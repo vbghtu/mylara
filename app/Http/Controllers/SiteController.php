@@ -47,9 +47,9 @@ class SiteController extends Controller
 
     public function product(string $productSlug): InertiaResponse
     {
-        $product = Product::where('slug', $productSlug)->with(['images', 'user', 'category'])->firstOrFail();
+        $product = Product::where('slug', $productSlug)->with(['images', 'user', 'category','reviews.user'])->firstOrFail();
         $categories = Category::all();
-
+    // @todo вывести рейтинг и количетсов отзывов в объект товара
         return inertia('Site/Product', [
             'layoutData' => [
                 'h1' => $product->title,
@@ -57,7 +57,10 @@ class SiteController extends Controller
                 'metaDescription' => $product->meta_description,
             ],
             'categories' => $categories,
-            'product' => new ProductItemResource($product)
+            'product' => new ProductItemResource($product),
+            'reviews' => $product->reviews()->with('user')->latest()->paginate(10),
+            'avg_rating' => $product->avg_rating,
+            'reviews_count' => $product->reviews_count,
         ]);
     }
 }

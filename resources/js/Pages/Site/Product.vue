@@ -3,17 +3,21 @@
 import {route} from "ziggy-js";
 import {Link} from "@inertiajs/vue3";
 import ProductReviewForm from "../../Components/ProductReviewForm.vue";
-
+// @todo вывести рейтинг и количетсов отзывов в обект товара
 const props = defineProps({
-    layoutData: Array,
+    layoutData: Object,
     categories: Object,
     product: {
         type: Object,
         required: true
     },
     auth: Object,
+    reviews: Object,
+    avg_rating: Number,
+    reviews_count: Number,
 });
-
+// console.log(props.avg_rating)
+// console.log(props.reviews_count)
 </script>
 
 <template>
@@ -51,7 +55,10 @@ const props = defineProps({
                         <p>Доступен для заказа: {{ props.product.data.is_available }}</p>
                         <p>Можно ли изменить комплектацию: {{ props.product.data.is_customizable }}</p>
                         <p>Цена: {{ props.product.data.price }}</p>
-                        <!--@todo категории со ссылкой-->
+                        <p>средний рейтинг товара: {{ props.avg_rating }}</p>
+                        <p>Количество отзывов: {{ props.reviews_count }}</p>
+
+
                         <p>Категория:
                             <Link :href="route('slug.resolve', props.product.data.category.slug ) ">
                                 {{ props.product.data.category.name }}
@@ -65,18 +72,19 @@ const props = defineProps({
 
             </div>
         </div>
+        <ProductReviewForm
+            v-if="props.auth"
+            :product="props.product"
+            class="mt-8"
+        />
+        <!-- Если пользователь не авторизован -->
+        <div v-else class="mt-8 p-4 bg-gray-50 rounded text-center">
+            <p class="text-gray-600 mb-2">Чтобы оставить отзыв, пожалуйста, войдите в аккаунт</p>
+            <a href="/login" class="text-blue-600 hover:underline">Войти →</a>
+        </div>
     </div>
 
-    <ProductReviewForm
-        v-if="props.auth"
-        :product="props.product"
-        class="mt-8"
-    />
-    <!-- Если пользователь не авторизован -->
-    <div v-else class="mt-8 p-4 bg-gray-50 rounded text-center">
-        <p class="text-gray-600 mb-2">Чтобы оставить отзыв, пожалуйста, войдите в аккаунт</p>
-        <a href="/login" class="text-blue-600 hover:underline">Войти →</a>
-    </div>
+
 </template>
 
 <style scoped>

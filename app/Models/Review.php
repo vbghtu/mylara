@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Review extends Model
 {
@@ -34,7 +36,7 @@ class Review extends Model
     }
 
     // Scope: только одобренные отзывы (самый частый запрос)
-    public function scopeApproved(Builder $query): Builder
+    public function scopeApproved($query)
     {
         return $query->where('status', 'approved');
     }

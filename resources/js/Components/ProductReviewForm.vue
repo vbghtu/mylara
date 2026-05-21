@@ -6,7 +6,7 @@ import { computed } from 'vue'
 const props = defineProps({
     product: { type: Object, required: true }
 })
-console.log(props.product.data.slug);
+// console.log(props.product.data.slug);
 const form = useForm({
     rating: 0,
     comment: ''
@@ -24,7 +24,7 @@ const submit = () => {
 </script>
 
 <template>
-    <div class="bg-white p-6 rounded-lg shadow-sm border mt-8">
+    <div class="bg-white p-6 rounded-lg shadow-sm border">
         <h3 class="text-lg font-semibold mb-4">Оставить отзыв о товаре</h3>
 
         <!-- 🔹 Сообщения об успехе/ошибке -->
