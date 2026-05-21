@@ -2,6 +2,7 @@
 
 import {route} from "ziggy-js";
 import {Link} from "@inertiajs/vue3";
+import ProductReviewForm from "../../Components/ProductReviewForm.vue";
 
 const props = defineProps({
     layoutData: Array,
@@ -9,9 +10,10 @@ const props = defineProps({
     product: {
         type: Object,
         required: true
-    }
+    },
+    auth: Object,
 });
-console.log(props.product.data.gallery);
+
 </script>
 
 <template>
@@ -63,6 +65,17 @@ console.log(props.product.data.gallery);
 
             </div>
         </div>
+    </div>
+
+    <ProductReviewForm
+        v-if="props.auth"
+        :product="props.product"
+        class="mt-8"
+    />
+    <!-- Если пользователь не авторизован -->
+    <div v-else class="mt-8 p-4 bg-gray-50 rounded text-center">
+        <p class="text-gray-600 mb-2">Чтобы оставить отзыв, пожалуйста, войдите в аккаунт</p>
+        <a href="/login" class="text-blue-600 hover:underline">Войти →</a>
     </div>
 </template>
 

@@ -10,6 +10,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ShowcaseController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\UrlResolverController;
@@ -68,6 +69,9 @@ Route::middleware(['web'])->group(function () {
         ->name('home.index.page');
     Route::get('/', [MainController::class, 'index'])->name('home');
     Route::get('product/{productSlug}', [SiteController::class, 'product'])->name('product');
+    Route::post('/product/{productSlug}/review', [ReviewController::class, 'storeForProduct'])
+        ->name('product.review.store')
+        ->middleware(['auth']); // макс 3 отзыва в минуту
 
     /* единный резолвер для категорий и витрин + для статических страниц в будующем*/
     Route::get('/{slug}', [UrlResolverController::class, 'resolve'])
