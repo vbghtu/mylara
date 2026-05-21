@@ -20,7 +20,8 @@ class SiteController extends Controller
         $categories = Category::all();
 
         $products = $category->products()->paginate($perPage, ['*'], 'page', $page);
-
+        // @todo вывести рейтинг и количетсов отзывов в объект товара ,
+        // @todo добавить сортировку товара по  авг рейтингу
         return inertia('Site/Category', [
             'layoutData' => [
                 'h1' => $category->name,
