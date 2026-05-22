@@ -71,11 +71,14 @@ Route::middleware(['web'])->group(function () {
     Route::get('product/{productSlug}', [SiteController::class, 'product'])->name('product');
     Route::post('/product/{productSlug}/review', [ReviewController::class, 'storeForProduct'])
         ->name('product.review.store')
-        ->middleware(['auth']); // макс 3 отзыва в минуту
+        ->middleware(['auth']);
 
     /* единный резолвер для категорий и витрин + для статических страниц в будующем*/
     Route::get('/{slug}', [UrlResolverController::class, 'resolve'])
         ->name('slug.resolve');
+    Route::post('/{slug}/review', [UrlResolverController::class, 'storeForShowcase'])
+        ->name('slug.resolve.review.store')
+        ->middleware(['auth']);
 
     Route::get('/{slug}/page/{page}', [UrlResolverController::class, 'resolve'])
         ->where('page', '[1-9][0-9]*') // только числа без ведущего нуля

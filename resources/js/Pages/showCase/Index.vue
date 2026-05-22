@@ -3,23 +3,28 @@ import {Link} from "@inertiajs/vue3";
 import {route} from "ziggy-js";
 import Paginator from "../../Components/Paginator.vue";
 import {onMounted} from "vue";
+import ReviewForm from "../../Components/ReviewForm.vue";
+
+// defineProps({ showcase: Object, auth: Object, hasReviewed: Boolean })
 
 const props = defineProps({
     layoutData: Array,
-    // user: Array,
+    auth: Array,
     products: {
         type: Object,
         required: true
     },
-    user: {
+    seller: {
         type: Object,
         required: true
-    }
+    },
+    hasReviewed: Boolean,
+    showCase:Object,
 });
 
 //@todo вывести лого, баннер и в зависмостиот активности подписки  что то еще
 onMounted(() => {
-    // console.log('👤 user:', props.user)
+    console.log('👤 user:', props.seller)
 
 })
 </script>
@@ -33,10 +38,10 @@ onMounted(() => {
     <div class="mx-auto max-w-12xl w-full px-4">
         <div class="flex flex-col md:flex-row gap-6">
             <div class="md:w-3/12 bg-gray-100 p-4 max-h-dvh overflow-scroll">
-            {{props.user.name}}
-                {{props.user.contact_phone}}
-                {{props.user.contact_email}}
-                <img :src="props.user.avatar" >
+            {{props.seller.name}}
+                {{props.seller.contact_phone}}
+                {{props.seller.contact_email}}
+                <img :src="props.seller.avatar" >
 <!--                <ul>-->
 <!--                    <li v-for="cat in props.categories">-->
 <!--                        <Link :href="route('category', cat.slug ) ">-->
@@ -63,6 +68,21 @@ onMounted(() => {
 <!--                    :pageMeta=props.products.meta-->
 <!--                />-->
             </div>
+        </div>
+        <ReviewForm
+            v-if="!hasReviewed && auth.user && auth.user.id !== props.seller.id"
+            :reviewable="props.showCase"
+            type="showcase"
+            route-name="slug.resolve.review.store"
+            title="Оставить отзыв автору"
+            placeholder="Оцените ассортимент, общение, качество обслуживания..."
+            class="mt-8"
+        />
+        <div
+            v-else-if="auth.user && hasReviewed"
+            class="mt-8 p-4 bg-blue-50 rounded text-center text-blue-700"
+        >
+            ✓ Вы уже оставили отзыв этому автору
         </div>
     </div>
 </template>

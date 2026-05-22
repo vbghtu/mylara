@@ -2,7 +2,7 @@
 
 import {route} from "ziggy-js";
 import {Link} from "@inertiajs/vue3";
-import ProductReviewForm from "../../Components/ProductReviewForm.vue";
+import ReviewForm from "../../Components/ReviewForm.vue";
 // @todo вывести рейтинг и количетсов отзывов в обект товара
 const props = defineProps({
     layoutData: Object,
@@ -15,9 +15,9 @@ const props = defineProps({
     reviews: Object,
     avg_rating: Number,
     reviews_count: Number,
+    hasReviewed: Boolean,
 });
-// console.log(props.avg_rating)
-// console.log(props.reviews_count)
+console.log(props.product.data.author)
 </script>
 
 <template>
@@ -72,15 +72,23 @@ const props = defineProps({
 
             </div>
         </div>
-        <ProductReviewForm
-            v-if="props.auth"
-            :product="props.product"
+
+        <ReviewForm
+            v-if="!hasReviewed && auth.user"
+            :reviewable="props.product"
+            type="product"
+            route-name="product.review.store"
+            title="Оставить отзыв о товаре"
+            placeholder="Оцените ассортимент, общение, качество обслуживания..."
             class="mt-8"
         />
-        <!-- Если пользователь не авторизован -->
-        <div v-else class="mt-8 p-4 bg-gray-50 rounded text-center">
-            <p class="text-gray-600 mb-2">Чтобы оставить отзыв, пожалуйста, войдите в аккаунт</p>
-            <a href="/login" class="text-blue-600 hover:underline">Войти →</a>
+
+        <!-- Если пользователь уже отзывался -->
+        <div
+            v-else-if="auth.user && hasReviewed"
+            class="mt-8 p-4 bg-blue-50 rounded text-center text-blue-700"
+        >
+            ✓ Вы уже оставили отзыв к этому товару
         </div>
     </div>
 

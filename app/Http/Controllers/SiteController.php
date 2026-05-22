@@ -6,6 +6,7 @@ use App\Http\Resources\ProductItemResource;
 use App\Http\Resources\ProductListResource;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Response as InertiaResponse;
@@ -46,10 +47,22 @@ class SiteController extends Controller
     }
 
 
-    public function product(string $productSlug): InertiaResponse
+    public function product(string $productSlug, Request $request): InertiaResponse
     {
-        $product = Product::where('slug', $productSlug)->with(['images', 'user', 'category','reviews.user'])->firstOrFail();
+        $product = Product::where('slug', $productSlug)
+            ->with(['images', 'user', 'category','reviews.user'])
+            ->firstOrFail();
+
         $categories = Category::all();
+
+        $hasReviewed = false;
+        if ($request->user()) {
+            $hasReviewed = Review::where('user_id', $request->user()->id)
+                ->where('reviewable_type', $product->getMorphClass()) // ✅ 'product' благодаря morphMap
+                ->where('reviewable_id', $product->id)
+                ->exists();
+        }
+
     // @todo вывести рейтинг и количетсов отзывов в объект товара
         return inertia('Site/Product', [
             'layoutData' => [
@@ -62,6 +75,7 @@ class SiteController extends Controller
             'reviews' => $product->reviews()->with('user')->latest()->paginate(10),
             'avg_rating' => $product->avg_rating,
             'reviews_count' => $product->reviews_count,
+            'hasReviewed' => $hasReviewed,
         ]);
     }
 }

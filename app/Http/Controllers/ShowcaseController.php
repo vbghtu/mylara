@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\ProductItemResource;
 use App\Http\Resources\ProductListResource;
 use App\Http\Resources\SellerResource;
+use App\Models\Review;
 use App\Models\Showcase;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -27,6 +28,13 @@ class ShowcaseController extends Controller
             'contact_phone' => $showCase->contact_phone,
         ]);
 
+        $hasReviewed = false;
+        if ($request->user()) {
+            $hasReviewed = Review::where('user_id', $request->user()->id)
+                ->where('reviewable_type', $showCase->getMorphClass()) // ✅ Учитывает morphMap
+                ->where('reviewable_id', $showCase->id)
+                ->exists();
+        }
 //@todo добавить проверку на активность витрины через Policy (?)!!!
 //@todo добавить проверку на активность подписки внутри витрины и если да что то дбавлять
 //@todo в зависимости от активности подписки выводить баннер (?)
@@ -53,10 +61,12 @@ class ShowcaseController extends Controller
 //                    'path' => $basePath, // ← критически важно!
 //                ],
             ],
-            'user' => array_merge(
+            'seller' => array_merge(
                 $sellerResource->toArray(request()),
                 $sellerResource->additional
             ),
+            'hasReviewed' => $hasReviewed,
+            'showCase' => $showCase,
         ]);
 
     }
