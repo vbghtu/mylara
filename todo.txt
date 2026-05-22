@@ -11,3 +11,102 @@
 
 
 
+Баги к исправлению:
+
+1. ReviewObserver: сброс кэша отзывов товара не срабатывает из-за сравнения reviewable_type с App\Models\Product::class.
+   В проекте включен morphMap, поэтому в reviewable_type сохраняется alias product/showcase.
+
+2. ReviewObserver: при сбросе кэша витрины после отзыва к товару используется $product->seller_id.
+   У Product есть user_id, а не seller_id.
+
+3. ProductRequest: валидация главной картинки ожидает поле image_path, а фронт и ProductController используют main_image.
+
+4. ProductController: удаление gallery-изображений идет через ProductImage::whereIn(...) без ограничения текущим товаром.
+   Нужно удалять через $product->images()->whereIn(...), чтобы нельзя было удалить чужие изображения по id.
+
+5. Review.php: используется тип Builder в scopeForType(), но не импортирован Illuminate\Database\Eloquent\Builder.
+
+6. Review.php: isProductReview() и isShowcaseReview() сравнивают reviewable_type с классами моделей.
+   При morphMap нужно сравнивать с alias product/showcase или использовать Relation::getMorphedModel()/getMorphClass().
+
+7. Frontend: убрать console.log из рабочих Vue-страниц:
+   resources/js/Pages/Site/Product.vue
+   resources/js/Pages/showCase/Index.vue
+
+
+Улучшения кода и архитектуры:
+
+1. Вынести повторяющуюся сборку meta для пагинации в общий helper/resource.
+   Сейчас одинаковый блок current_page/last_page/per_page/total/from/to/path повторяется в MainController, SiteController, ProductController, CategoryController.
+
+2. Вынести создание отзывов в отдельный сервис/action.
+   ReviewController::storeForProduct() и UrlResolverController::storeForShowcase() делают почти одно и то же: validate, create, catch duplicate, flash response.
+
+3. Добавить ReviewPolicy и включить авторизацию отзывов.
+   Нужно явно запретить отзыв на свой товар/свою витрину, повторный отзыв и отзывы к неактивным сущностям.
+
+4. Разделить UrlResolverController на резолвинг URL и действия над отзывами.
+   Сейчас controller одновременно определяет тип slug, рендерит страницы через другие controllers и сохраняет отзывы к showcase.
+
+5. Добавить FormRequest для отзывов.
+   Правила rating/comment сейчас продублированы прямо в controllers.
+
+6. Привести naming к одному стилю:
+   showCase/showcase, seller_vitrina/showcases, profile_foto/profile_photo, main_image/image_path.
+
+7. Убрать большие закомментированные блоки кода из моделей и controllers.
+   Если логика нужна позже, оставить короткий TODO в todo.txt, а не хранить мертвый код в рабочих файлах.
+
+8. Добавить типы возвращаемых значений у Eloquent-связей.
+   Например BelongsTo, HasMany, MorphMany. Это улучшит IDE-подсказки и снизит риск ошибок в связях.
+
+9. Добавить scopes для частых фильтров:
+   Product::available(), Showcase::active(), Review::approved(), фильтры по slug/status.
+
+10. Перенести расчёт рейтингов/количества отзывов в единый слой.
+    Сейчас часть логики в accessors Product, часть планируется в Showcase, часть кэша чистится observer-ом.
+
+11. Для Showcase вернуть пагинацию товаров.
+    Сейчас ShowcaseController грузит все products сразу, а закомментированный paginator уже намекает, что список может расти.
+
+12. В ProductListResource добавить рейтинг и количество отзывов, если это нужно в карточках товара.
+    Сейчас TODO про рейтинг лежит в SiteController/Site Product, но лучше отдавать единый формат через resource.
+
+13. Ограничить поля, отдаваемые на фронт.
+    Не передавать целые Eloquent-модели там, где нужен resource: category, showCase, product edit payload, seller.
+
+14. Добавить нормальные feature-тесты вместо ExampleTest:
+    главная, категория, товар, витрина, создание товара, загрузка изображений, отзыв, запрет повторного отзыва, slug resolver.
+
+15. Настроить окружение для запуска тестов.
+    Сейчас php artisan test не стартует без PHP extensions: dom, xml, xmlwriter.
+
+16. Добавить npm script для форматирования/проверки фронта.
+    Например lint/format, чтобы ловить console.log, неиспользуемые imports и ошибки Vue до build.
+
+17. Разбить frontend pages на более мелкие компоненты.
+    Карточка товара, список категорий, галерея товара, блок параметров, блок отзывов, форма товара.
+
+18. Улучшить ProductImageUpload:
+    очищать object URLs через URL.revokeObjectURL(), синхронизировать имена emit events, показывать лимит/ошибки до отправки формы.
+
+19. Улучшить ReviewForm:
+    заменить number input рейтинга на нормальный UI 1-5, убрать console.error из production flow, корректно поддержать разные формы reviewable payload.
+
+20. Исправить Paginator:
+    условие "Вперед" должно сравнивать current_page с last_page, а не с total.
+
+21. Разнести routes/web.php на группы или отдельные route-файлы по смыслу:
+    auth, profile/products, admin/categories, public site, reviews.
+
+22. Убрать лишнюю Route::middleware(['web']) внутри routes/web.php.
+    web middleware уже применяется к web routes в bootstrap/app.php.
+
+23. Добавить policies для Product/Category/Showcase.
+    Сейчас часть доступа проверяется через роли в routes, часть через выборку $user->products(), но единых правил владения нет.
+
+24. Добавить обработку файлов в транзакциях аккуратнее.
+    DB transaction не откатывает уже загруженные файлы, поэтому при ошибке после store() могут остаться лишние файлы.
+
+25. Добавить сортировку и фильтры товаров на уровне query/request.
+    Сейчас TODO есть в SiteController, лучше оформить как request параметры и scopes.
