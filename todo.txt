@@ -12,22 +12,7 @@
 
 
 Баги к исправлению:
-
-1. ReviewObserver: сброс кэша отзывов товара не срабатывает из-за сравнения reviewable_type с App\Models\Product::class.
-   В проекте включен morphMap, поэтому в reviewable_type сохраняется alias product/showcase.
-
-2. ReviewObserver: при сбросе кэша витрины после отзыва к товару используется $product->seller_id.
-   У Product есть user_id, а не seller_id.
-
-3. ProductRequest: валидация главной картинки ожидает поле image_path, а фронт и ProductController используют main_image.
-
-4. ProductController: удаление gallery-изображений идет через ProductImage::whereIn(...) без ограничения текущим товаром.
-   Нужно удалять через $product->images()->whereIn(...), чтобы нельзя было удалить чужие изображения по id.
-
-5. Review.php: используется тип Builder в scopeForType(), но не импортирован Illuminate\Database\Eloquent\Builder.
-
-6. Review.php: isProductReview() и isShowcaseReview() сравнивают reviewable_type с классами моделей.
-   При morphMap нужно сравнивать с alias product/showcase или использовать Relation::getMorphedModel()/getMorphClass().
+1. неработает изменения товара от селлера(проблема в логике изменения и типах полей)
 
 7. Frontend: убрать console.log из рабочих Vue-страниц:
    resources/js/Pages/Site/Product.vue

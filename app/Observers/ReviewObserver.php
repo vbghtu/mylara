@@ -51,7 +51,7 @@ class ReviewObserver
 
     private function clearCache(Review $review): void
     {
-        if ($review->reviewable_type === \App\Models\Product::class) {
+        if ($review->isProductReview()) {
             // 1. Сброс кэша товара
             Cache::forget("product:rating:{$review->reviewable_id}");
             Cache::forget("product:reviews:{$review->reviewable_id}");
@@ -59,8 +59,8 @@ class ReviewObserver
             // 2. Сброс кэша продавца (т.к. рейтинг товара влияет на общий)
             $product = \App\Models\Product::find($review->reviewable_id);
             if ($product) {
-                Cache::forget("showcase:rating:{$product->seller_id}");
-                Cache::forget("showcase:reviews:{$product->seller_id}");
+                Cache::forget("showcase:rating:{$product->user_id}");
+                Cache::forget("showcase:reviews:{$product->user_id}");
             }
         } else {
             // 3. Отзыв к витрине

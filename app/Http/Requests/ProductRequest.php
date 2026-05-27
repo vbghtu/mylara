@@ -27,7 +27,7 @@ class ProductRequest extends FormRequest
         return [
             'category_id' => ['required', 'exists:categories,id'],
             'title' => ['required', 'string', 'max:255'],
-            'image_path' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
+            'main_image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
             'gallery' => ['nullable', 'array', 'max:5'],
             'gallery.*' => ['image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
             'removed_gallery_ids' => ['nullable', 'array'],

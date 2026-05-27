@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
@@ -51,12 +52,17 @@ class Review extends Model
     // Helper: является ли отзыв к товару
     public function isProductReview(): bool
     {
-        return $this->reviewable_type === Product::class;
+        return $this->getReviewableClass() === Product::class;
     }
 
     // Helper: является ли отзыв к витрине
     public function isShowcaseReview(): bool
     {
-        return $this->reviewable_type === Showcase::class;
+        return $this->getReviewableClass() === Showcase::class;
+    }
+
+    private function getReviewableClass(): string
+    {
+        return Relation::getMorphedModel($this->reviewable_type) ?? $this->reviewable_type;
     }
 }

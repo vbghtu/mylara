@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductListResource;
 use App\Models\Product;
-use App\Models\ProductImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -91,7 +90,9 @@ class ProductController extends Controller
         $data = $request->validated();
         //@todo доделать обработку ошибок  на типы файлов в первую очередь
         if ($request->has('removed_gallery_ids')) {
-            $imagesToDelete = ProductImage::whereIn('id', $request->removed_gallery_ids)->get();
+            $imagesToDelete = $product->images()
+                ->whereIn('id', $request->removed_gallery_ids)
+                ->get();
 
             foreach ($imagesToDelete as $image) {
                 // Удаляем файл с диска
