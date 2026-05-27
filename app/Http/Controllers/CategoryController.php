@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
+use App\Support\PaginationMeta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -17,8 +18,6 @@ class CategoryController extends Controller
         $perPage = config('app.pagination.category_per_page');
         $categories = Category::paginate($perPage, ['*'], 'page', $page);
 
-        $basePath = preg_replace('#/page/\d+$#', '', $request->url());
-
         return Inertia::render('AdminArea/Category/Index', [
             'user' => $user,
             'layoutData' => [
@@ -26,15 +25,7 @@ class CategoryController extends Controller
             ],
             'categories' => [
                 'data' => $categories,
-                'meta' => [
-                    'current_page' => $categories->currentPage(),
-                    'last_page' => $categories->lastPage(),
-                    'per_page' => $categories->perPage(),
-                    'total' => $categories->total(),
-                    'from' => $categories->firstItem(),
-                    'to' => $categories->lastItem(),
-                    'path' => $basePath,
-                ],
+                'meta' => PaginationMeta::fromRequest($categories, $request),
             ],
         ]);
     }

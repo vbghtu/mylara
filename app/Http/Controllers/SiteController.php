@@ -7,6 +7,7 @@ use App\Http\Resources\ProductListResource;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Review;
+use App\Support\PaginationMeta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Response as InertiaResponse;
@@ -17,7 +18,6 @@ class SiteController extends Controller
     {
         $category = Category::where('slug', $categorySlug)->firstOrFail();
         $perPage = config('app.pagination.products_per_page');
-        $basePath = preg_replace('#/page/\d+$#', '', $request->url());
         $categories = Category::all();
 
         $products = $category->products()->paginate($perPage, ['*'], 'page', $page);
@@ -33,15 +33,7 @@ class SiteController extends Controller
             'categories' => $categories,
             'products' => [
                 'data' => ProductListResource::collection($products),
-                'meta' => [
-                    'current_page' => $products->currentPage(),
-                    'last_page' => $products->lastPage(),
-                    'per_page' => $products->perPage(),
-                    'total' => $products->total(),
-                    'from' => $products->firstItem(),
-                    'to' => $products->lastItem(),
-                    'path' => $basePath, // ← критически важно!
-                ],
+                'meta' => PaginationMeta::fromRequest($products, $request),
             ],
         ]);
     }

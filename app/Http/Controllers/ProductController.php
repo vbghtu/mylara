@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductListResource;
 use App\Models\Product;
+use App\Support\PaginationMeta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -26,9 +27,6 @@ class ProductController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate($perPage, ['*'], 'page', $page); // сколько элементов на странице (например, 15)
 
-        $basePath = preg_replace('#/page/\d+$#', '', $request->url());
-
-
         return Inertia::render('Profile/Products/Index', [
             'user' => $user,
             'layoutData' => [
@@ -36,15 +34,7 @@ class ProductController extends Controller
             ],
             'products' => [
                 'data' => ProductListResource::collection($products),
-                'meta' => [
-                    'current_page' => $products->currentPage(),
-                    'last_page' => $products->lastPage(),
-                    'per_page' => $products->perPage(),
-                    'total' => $products->total(),
-                    'from' => $products->firstItem(),
-                    'to' => $products->lastItem(),
-                    'path' => $basePath, // ← критически важно!
-                ],
+                'meta' => PaginationMeta::fromRequest($products, $request),
             ],
         ]);
     }

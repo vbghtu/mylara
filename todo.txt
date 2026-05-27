@@ -12,7 +12,7 @@
 
 
 Баги к исправлению:
-1. неработает изменения товара от селлера(проблема в логике изменения и типах полей)
+1. не работает изменения товара от селлера(проблема в логике изменения и типах полей)
 
 7. Frontend: убрать console.log из рабочих Vue-страниц:
    resources/js/Pages/Site/Product.vue
@@ -21,8 +21,7 @@
 
 Улучшения кода и архитектуры:
 
-1. Вынести повторяющуюся сборку meta для пагинации в общий helper/resource.
-   Сейчас одинаковый блок current_page/last_page/per_page/total/from/to/path повторяется в MainController, SiteController, ProductController, CategoryController.
+1. добавить к мете на странциа хависимость от тсраницы "страница № страницы"
 
 2. Вынести создание отзывов в отдельный сервис/action.
    ReviewController::storeForProduct() и UrlResolverController::storeForShowcase() делают почти одно и то же: validate, create, catch duplicate, flash response.
@@ -63,8 +62,6 @@
 14. Добавить нормальные feature-тесты вместо ExampleTest:
     главная, категория, товар, витрина, создание товара, загрузка изображений, отзыв, запрет повторного отзыва, slug resolver.
 
-15. Настроить окружение для запуска тестов.
-    Сейчас php artisan test не стартует без PHP extensions: dom, xml, xmlwriter.
 
 16. Добавить npm script для форматирования/проверки фронта.
     Например lint/format, чтобы ловить console.log, неиспользуемые imports и ошибки Vue до build.
