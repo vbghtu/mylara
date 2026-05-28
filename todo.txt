@@ -75,12 +75,6 @@
 20. Исправить Paginator:
     условие "Вперед" должно сравнивать current_page с last_page, а не с total.
 
-21. Разнести routes/web.php на группы или отдельные route-файлы по смыслу:
-    auth, profile/products, admin/categories, public site, reviews.
-
-22. Убрать лишнюю Route::middleware(['web']) внутри routes/web.php.
-    web middleware уже применяется к web routes в bootstrap/app.php.
-
 23. Добавить policies для Product/Category/Showcase.
     Сейчас часть доступа проверяется через роли в routes, часть через выборку $user->products(), но единых правил владения нет.
 

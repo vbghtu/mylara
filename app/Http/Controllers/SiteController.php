@@ -24,7 +24,7 @@ class SiteController extends Controller
         return inertia('Site/Category', [
             'layoutData' => [
                 'h1' => $category->name,
-                'metaTitle' => PaginationMeta::titleWithPage($category->meta_title, $products),
+                'metaTitle' => PaginationMeta::titleWithPage($category->meta_title ?? $category->name, $products),
                 'metaDescription' => $category->meta_description,
             ],
             'category' => $category, // неуверен надо ли оно
