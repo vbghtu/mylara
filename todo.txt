@@ -21,7 +21,6 @@
 
 Улучшения кода и архитектуры:
 
-1. добавить к мете на странциа хависимость от тсраницы "страница № страницы"
 
 2. Вынести создание отзывов в отдельный сервис/action.
    ReviewController::storeForProduct() и UrlResolverController::storeForShowcase() делают почти одно и то же: validate, create, catch duplicate, flash response.

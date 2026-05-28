@@ -31,6 +31,7 @@ class ProductController extends Controller
             'user' => $user,
             'layoutData' => [
                 'h1' => 'Мои продукты',
+                'metaTitle' => PaginationMeta::titleWithPage('Мои продукты', $products),
             ],
             'products' => [
                 'data' => ProductListResource::collection($products),

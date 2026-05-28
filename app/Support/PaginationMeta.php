@@ -19,4 +19,13 @@ class PaginationMeta
             'path' => preg_replace('#/page/\d+$#', '', $request->url()),
         ];
     }
+
+    public static function titleWithPage(string $title, LengthAwarePaginator $paginator): string
+    {
+        if ($paginator->currentPage() <= 1) {
+            return $title;
+        }
+
+        return $title . ' — Страница № ' . $paginator->currentPage();
+    }
 }

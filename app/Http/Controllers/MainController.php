@@ -21,12 +21,11 @@ class MainController extends Controller
         $categories = Category::all();
         $products = Product::paginate($perPage, ['*'], 'page', $page);
 
-
         return Inertia::render('Site/Index', [
             'user' => $user,
             'layoutData' => [
                 'h1' => 'Главная',
-                'metaTitle' => 'Главная — Мой магазин',
+                'metaTitle' => PaginationMeta::titleWithPage('Главная — Мой магазин', $products),
                 'metaDescription' => 'Лучшие товары по низким ценам',
             ],
             'categories' => $categories,
