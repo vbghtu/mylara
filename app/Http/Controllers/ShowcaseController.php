@@ -13,44 +13,38 @@ use Inertia\Response as InertiaResponse;
 
 class ShowcaseController extends Controller
 {
-    public function index(string $showCaseSlug, Request $request, $page = null): InertiaResponse
+    public function index(string $showcaseSlug, Request $request, $page = null): InertiaResponse
     {
-        $showCase = Showcase::with(['seller', 'products'])
-            ->where('slug', $showCaseSlug)
+        $showcase = Showcase::with(['seller', 'products'])
+            ->where('slug', $showcaseSlug)
             ->firstOrFail();
 
-        $sellerResource = new SellerResource($showCase->seller);
+        $sellerResource = new SellerResource($showcase->seller);
         $sellerResource->additional([
-            'is_active' => $showCase->is_active,
-            'showcase_logo' => $showCase->logo ? asset('storage/'.$showCase->logo) : null,
-            'subscription_end' => $showCase->subscription_end?->format('Y-m-d'),
-            'contact_email' => $showCase->contact_email,
-            'contact_phone' => $showCase->contact_phone,
+            'is_active' => $showcase->is_active,
+            'showcase_logo' => $showcase->logo ? asset('storage/'.$showcase->logo) : null,
+            'subscription_end' => $showcase->subscription_end?->format('Y-m-d'),
+            'contact_email' => $showcase->contact_email,
+            'contact_phone' => $showcase->contact_phone,
         ]);
 
         $hasReviewed = false;
         if ($request->user()) {
             $hasReviewed = Review::where('user_id', $request->user()->id)
-                ->where('reviewable_type', $showCase->getMorphClass()) // ✅ Учитывает morphMap
-                ->where('reviewable_id', $showCase->id)
+                ->where('reviewable_type', $showcase->getMorphClass()) // ✅ Учитывает morphMap
+                ->where('reviewable_id', $showcase->id)
                 ->exists();
         }
-//@todo добавить проверку на активность витрины через Policy (?)!!!
-//@todo добавить проверку на активность подписки внутри витрины и если да что то дбавлять
-//@todo в зависимости от активности подписки выводить баннер (?)
-
-
-
-        return inertia('showCase/Index', [
+        return inertia('showcase/Index', [
             'layoutData' => [
-                'h1' => $showCase->title,
-                'metaTitle' => $showCase->meta_title,
-                'metaDescription' => $showCase->meta_description,
+                'h1' => $showcase->title,
+                'metaTitle' => $showcase->meta_title,
+                'metaDescription' => $showcase->meta_description,
             ],
 //            'category' => $category, // неуверен надо ли оно
 //            'categories' => $categories,
             'products' => [
-                'data' => ProductListResource::collection($showCase->products)
+                'data' => ProductListResource::collection($showcase->products)
 //                'meta' => [
 //                    'current_page' => $products->currentPage(),
 //                    'last_page' => $products->lastPage(),
@@ -66,7 +60,7 @@ class ShowcaseController extends Controller
                 $sellerResource->additional
             ),
             'hasReviewed' => $hasReviewed,
-            'showCase' => $showCase,
+            'showcase' => $showcase,
         ]);
 
     }

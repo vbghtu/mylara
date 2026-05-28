@@ -34,8 +34,6 @@
 5. Добавить FormRequest для отзывов.
    Правила rating/comment сейчас продублированы прямо в controllers.
 
-6. Привести naming к одному стилю:
-   showCase/showcase, seller_vitrina/showcases, profile_foto/profile_photo, main_image/image_path.
 
 7. Убрать большие закомментированные блоки кода из моделей и controllers.
    Если логика нужна позже, оставить короткий TODO в todo.txt, а не хранить мертвый код в рабочих файлах.
@@ -91,3 +89,78 @@
 
 25. Добавить сортировку и фильтры товаров на уровне query/request.
     Сейчас TODO есть в SiteController, лучше оформить как request параметры и scopes.
+
+
+TODO из кода, перенесены 2026-05-28:
+
+1. app/Http/Controllers/ProductController.php:25
+   добавить категории
+   Контекст: ProductController::index(), перед выборкой $user->products()->orderBy(...)->paginate(...)
+
+2. app/Http/Controllers/ProductController.php:82
+   доделать обработку ошибок на типы файлов в первую очередь
+   Контекст: ProductController::update(), сразу после $data = $request->validated(), перед обработкой removed_gallery_ids/gallery/main_image.
+
+3. app/Http/Controllers/Auth/ForgotPasswordController.php:25
+   шаблоны писем и отправка
+   Контекст: ForgotPasswordController::sendResetLinkEmail(), после validate email, перед Password::sendResetLink().
+
+4. app/Http/Controllers/SiteController.php:24
+   вывести рейтинг и количество отзывов в объект товара
+   Контекст: SiteController::categories(), после $category->products()->paginate(...), перед inertia('Site/Category', ...).
+
+5. app/Http/Controllers/SiteController.php:25
+   добавить сортировку товара по avg рейтингу
+   Контекст: SiteController::categories(), рядом с пагинацией товаров категории.
+
+6. app/Http/Controllers/SiteController.php:58
+   вывести рейтинг и количество отзывов в объект товара
+   Контекст: SiteController::product(), после проверки $hasReviewed, перед inertia('Site/Product', ...).
+
+7. app/Http/Controllers/ShowcaseController.php:38
+   добавить проверку на активность витрины через Policy
+   Контекст: ShowcaseController::index(), после проверки $hasReviewed, перед отдачей inertia('showcase/Index', ...).
+
+8. app/Http/Controllers/ShowcaseController.php:39
+   добавить проверку на активность подписки внутри витрины и, если активна, что-то добавлять
+   Контекст: ShowcaseController::index(), рядом с логикой sellerResource и showcase subscription_end.
+
+9. app/Http/Controllers/ShowcaseController.php:40
+   в зависимости от активности подписки выводить баннер
+   Контекст: ShowcaseController::index(), рядом с showcase_logo/subscription_end и фронтом showcase/Index.
+
+10. app/Providers/AppServiceProvider.php:34
+    это тест, сюда надо будет прокинуть меню и набор его полей чуть позже
+    Контекст: AppServiceProvider::boot(), после Relation::morphMap(...) и Review::observe(...).
+
+11. app/Models/Product.php:30
+    мультикатегорийность
+    Контекст: Product::category(), сейчас связь belongsTo(Category::class).
+
+12. resources/js/Pages/showcase/Index.vue:25
+    вывести лого, баннер и в зависимости от активности подписки что-то еще
+    Контекст: showcase page props: seller, hasReviewed, showcase; рядом с onMounted() и выводом seller/contact/logo.
+
+13. resources/js/Components/ProductImageUpload.vue:3
+    сделать компонент способным к отображению, замене, добавлению и удалению фоток
+    Контекст: ProductImageUpload props existingMainImage/existingGallery/errors, emits update:mainImage/update:gallery/remove:existingImage.
+
+14. resources/js/Pages/Profile/Products/Edit.vue:18
+    добавить в миграцию дефолтное category_id, добавить в сидер какие-нибудь категории, протащить их сюда
+    Контекст: Edit product form useForm(), category_id временно задан как 1.
+
+15. resources/js/Pages/Profile/Index.vue:80
+    добавить вывод и выбор категорий и вероятно материалов
+    Контекст: Profile/Index.vue, форма профиля пользователя в правой колонке.
+
+16. resources/js/Pages/Profile/Products/Create.vue:10
+    добавить в миграцию дефолтное category_id, добавить в сидер какие-нибудь категории, протащить их сюда
+    Контекст: Create product form useForm(), category_id временно задан как 1.
+
+17. resources/js/Pages/Profile/Products/Create.vue:111
+    сделать компонент чекбокса, а лучше кнопки-свича
+    Контекст: после формы создания товара, поля is_customizable и is_available сейчас используют TextInput type="checkbox".
+
+18. resources/js/Pages/Site/Product.vue:6
+    вывести рейтинг и количество отзывов в объект товара
+    Контекст: Site/Product.vue props уже принимают avg_rating и reviews_count, но TODO был перед defineProps().

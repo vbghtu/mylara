@@ -15,7 +15,7 @@ const props = defineProps({
 });
 
 const form = useForm({
-    category_id: 1, // пока что как дефолтное значение @todo добавить в миграцию дефолтное, добавить в сидер какинить категории, протащить их сюда
+    category_id: 1, // пока что как дефолтное значение
     title: props.product?.title || '',
     slug: props.product?.slug || '',
     description: props.product?.description || '',

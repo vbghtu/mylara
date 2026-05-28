@@ -52,7 +52,7 @@ class ProductItemResource extends JsonResource
                 return [
                     'id' => $this->user->id,
                     'name' => $this->user->name,
-                    'avatar' => $this->user->profile_foto,
+                    'avatar' => $this->user->profile_photo,
                     // Не отдавай email, password и т.д.!
                 ];
             }),

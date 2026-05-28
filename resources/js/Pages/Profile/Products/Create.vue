@@ -7,7 +7,7 @@ import ProductImageUpload from "../../../Components/ProductImageUpload.vue";
 import PrimaryButton from "../../../Components/PrimaryButton.vue";
 
 const form = useForm({
-    category_id: 1, // пока что как дефолтное значение @todo добавить в миграцию дефолтное, добавить в сидер какинить категории, протащить их сюда
+    category_id: 1, // пока что как дефолтное значение
     title: '',
     slug: '',
     description: '',
@@ -108,7 +108,6 @@ const submit = () => {
                 Создать
             </PrimaryButton>
         </form>
-        <!--@todo сделать компонент чекбокса а лучше кнопки свича -->
     </ProductsLayout>
 </template>
 

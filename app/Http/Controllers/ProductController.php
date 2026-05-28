@@ -22,7 +22,6 @@ class ProductController extends Controller
         $user = Auth::user();
         $perPage = config('app.pagination.products_per_page');
 
-// @todo добавить категории
         $products = $user->products()
             ->orderBy('created_at', 'desc')
             ->paginate($perPage, ['*'], 'page', $page); // сколько элементов на странице (например, 15)
@@ -79,7 +78,6 @@ class ProductController extends Controller
     public function update(ProductRequest $request, Product $product)
     {
         $data = $request->validated();
-        //@todo доделать обработку ошибок  на типы файлов в первую очередь
         if ($request->has('removed_gallery_ids')) {
             $imagesToDelete = $product->images()
                 ->whereIn('id', $request->removed_gallery_ids)

@@ -1,6 +1,6 @@
 <script setup>
 import {computed, ref} from 'vue';
-// @todo сделать компонент способным к отображению замене добавлению и удалению фоток
+
 const props = defineProps({
     // Главное изображение (может быть null или строкой)
     existingMainImage: {

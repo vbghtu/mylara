@@ -30,8 +30,5 @@ class AppServiceProvider extends ServiceProvider
 
         Review::observe(ReviewObserver::class);
 
-
-        //  @todo это тест сюда надо будет прокинуть меню и набор его поле чуть позже
-
     }
 }

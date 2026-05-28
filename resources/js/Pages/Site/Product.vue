@@ -3,7 +3,7 @@
 import {route} from "ziggy-js";
 import {Link} from "@inertiajs/vue3";
 import ReviewForm from "../../Components/ReviewForm.vue";
-// @todo вывести рейтинг и количетсов отзывов в обект товара
+
 const props = defineProps({
     layoutData: Object,
     categories: Object,

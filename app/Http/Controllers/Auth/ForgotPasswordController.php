@@ -22,7 +22,6 @@ class ForgotPasswordController extends Controller
         $request->validate([
             'email' => 'required|email',
         ]);
-//@todo шаблоны  писем и отправка
         // Отправляем ссылку для сброса пароля
         $status = Password::sendResetLink(
             $request->only('email')

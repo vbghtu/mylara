@@ -77,7 +77,6 @@ const updatePhoto = (event) => {
             </div>
         </div>
         <div class="w-2/3">
-            <!--@todo добавить вывод и выбор категорий и вероятно материалов -->
             <form class="" @submit.prevent="submit">
                 <div>
                     <TextInput
